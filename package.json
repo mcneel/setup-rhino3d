@@ -1,0 +1,12 @@
+{
+  "name": "setup-rhino3d",
+  "version": "1.0.0",
+  "description": "Github Action to install Rhino3d",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
