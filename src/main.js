@@ -34,6 +34,9 @@ async function run() {
         file.on('finish', () => {
           file.close()
           console.log('Download Completed')
+          const stats = fs.statSync(rhino.exe)
+          const fileSizeInMb = stats.size / 1024 ** 2
+          console.log(`rhino.exe size: ${fileSizeInMb} MB`)
         })
       }
     )
@@ -42,8 +45,8 @@ async function run() {
       "Start-Process -FilePath rhino.exe -ArgumentList '-passive', -norestart' -Wait"
     exec(ps, { shell: 'powershell.exe' }, (error, stdout, stderr) => {
       // do whatever with stdout
-      //console.log(stdout)
-      core.debug(stdout)
+      console.log(stdout)
+      //core.debug(stdout)
     })
 
     /*
