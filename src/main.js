@@ -1,5 +1,5 @@
 const core = require('@actions/core')
-const { wait } = require('./wait')
+//const { wait } = require('./wait')
 
 const https = require('https')
 const fs = require('fs')

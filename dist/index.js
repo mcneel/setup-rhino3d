@@ -24920,7 +24920,7 @@ exports["default"] = _default;
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const core = __nccwpck_require__(2186)
-const { wait } = __nccwpck_require__(1312)
+//const { wait } = require('./wait')
 
 const https = __nccwpck_require__(5687)
 const fs = __nccwpck_require__(7147)
@@ -24985,30 +24985,6 @@ async function run() {
 module.exports = {
   run
 }
-
-
-/***/ }),
-
-/***/ 1312:
-/***/ ((module) => {
-
-/**
- * Wait for a number of milliseconds.
- *
- * @param {number} milliseconds The number of milliseconds to wait.
- * @returns {Promise<string>} Resolves with 'done!' after the wait is over.
- */
-async function wait(milliseconds) {
-  return new Promise(resolve => {
-    if (isNaN(milliseconds)) {
-      throw new Error('milliseconds not a number')
-    }
-
-    setTimeout(() => resolve('done!'), milliseconds)
-  })
-}
-
-module.exports = { wait }
 
 
 /***/ }),
