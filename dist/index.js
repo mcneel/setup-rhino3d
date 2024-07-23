@@ -24958,18 +24958,18 @@ async function run() {
           const stats = fs.statSync('rhino.exe')
           const fileSizeInMb = stats.size / 1024 ** 2
           console.log(`rhino.exe size: ${fileSizeInMb} MB`)
+
+          const ps =
+            "Start-Process -FilePath rhino.exe -ArgumentList '-passive', '-norestart' -Wait"
+          exec(ps, { shell: 'powershell.exe' }, (error, stdout, stderr) => {
+            // do whatever with stdout
+            console.log(error)
+            console.log(stdout)
+            console.log(stderr)
+          })
         })
       }
     )
-
-    const ps =
-      "Start-Process -FilePath rhino.exe -ArgumentList '-passive', '-norestart' -Wait"
-    exec(ps, { shell: 'powershell.exe' }, (error, stdout, stderr) => {
-      // do whatever with stdout
-      console.log(error)
-      console.log(stdout)
-      console.log(stderr)
-    })
 
     /*
     // Log the current timestamp, wait, then log the new timestamp
