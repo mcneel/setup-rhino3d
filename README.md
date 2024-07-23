@@ -18,6 +18,10 @@ setting up repository secrets, see
 See below for an example on how to use this api key, stored as a repository
 secret, in your workflow.
 
+### email-address
+
+**Required** The email of the associated user.
+
 ### `rhino-version`
 
 **Optional** The version of Rhino to install in `majorRelease.serviceRelease`

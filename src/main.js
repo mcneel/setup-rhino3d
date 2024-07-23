@@ -11,7 +11,7 @@ const { exec } = require('child_process')
  */
 async function run() {
   try {
-    const ms = core.getInput('milliseconds', { required: true })
+    //const ms = core.getInput('milliseconds', { required: true })
 
     const apiKey = core.getInput('api-key', { required: true })
     const emailAddress = core.getInput('email-address', { required: true })

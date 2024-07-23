@@ -66,7 +66,7 @@ describe('action', () => {
     )
   })
 
-  it('fails if no input is provided', async () => {
+  it('fails if no api-key input is provided', async () => {
     // Set the action's inputs as return values from core.getInput()
     getInputMock.mockImplementation(name => {
       switch (name) {
@@ -86,4 +86,7 @@ describe('action', () => {
       'Input required and not supplied: api-key'
     )
   })
+
+  //TODO: Add tests related to validating email address
+
 })
