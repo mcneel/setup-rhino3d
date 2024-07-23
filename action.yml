@@ -1,13 +1,27 @@
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'Setup Rhino3d'
+description: 'Install Rhino3d on the runner'
+author: 'McNeel'
+
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
+  api-key: # id of input
+    description: 'Api token generated when setting up core-hour billing'
     required: true
-    default: 'World'
+  email-address: # id of input
+    description: 'Email address associated with the user'
+    required: true
+  rhino-version:
+    description: 'Rhino version to install'
+    required: false
+    default: '8.9'
+
+#todo: change these options or remove them
 outputs:
   time: # id of output
     description: 'The time we greeted you'
+
 runs:
   using: 'node20'
   main: 'dist/index.js'
+  pre-if: runner.os != 'windows'
+  pre: |
+    exit 1
