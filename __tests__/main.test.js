@@ -88,5 +88,4 @@ describe('action', () => {
   })
 
   //TODO: Add tests related to validating email address
-
 })

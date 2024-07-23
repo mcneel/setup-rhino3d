@@ -24932,7 +24932,7 @@ const { exec } = __nccwpck_require__(2081)
  */
 async function run() {
   try {
-    const ms = core.getInput('milliseconds', { required: true })
+    //const ms = core.getInput('milliseconds', { required: true })
 
     const apiKey = core.getInput('api-key', { required: true })
     const emailAddress = core.getInput('email-address', { required: true })
