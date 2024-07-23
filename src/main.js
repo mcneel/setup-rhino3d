@@ -45,8 +45,9 @@ async function run() {
       "Start-Process -FilePath rhino.exe -ArgumentList '-passive', -norestart' -Wait"
     exec(ps, { shell: 'powershell.exe' }, (error, stdout, stderr) => {
       // do whatever with stdout
+      console.log(error)
       console.log(stdout)
-      //core.debug(stdout)
+      console.log(stderr)
     })
 
     /*
