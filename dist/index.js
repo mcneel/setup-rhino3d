@@ -24963,7 +24963,7 @@ async function run() {
     )
 
     const ps =
-      "Start-Process -FilePath $rhinoSetup -ArgumentList '-passive', '-norestart' -Wait"
+      "Start-Process -FilePath rhino.exe -ArgumentList '-passive', '-norestart' -Wait"
     exec(ps, { shell: 'powershell.exe' }, (error, stdout, stderr) => {
       // do whatever with stdout
       console.log(error)
