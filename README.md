@@ -30,3 +30,13 @@ with:
   api-key: ${{ secrets.RhinoApiKey }} #required. You can name your secret whatever you like when you set it up.
   rhino-version: 8.9 #optional. if this is not set, this action will default to the latest service release
 ```
+
+
+## Development
+
+This action uses vercel/ncc to compile the source and dependencies into one file. These practices are inherited from [this tutorial](https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action#commit-tag-and-push-your-action-to-github) on setting up a GitHub Action. 
+
+1. Install vercell/ncc: `npm i -g @vercel/ncc` - note, perhaps this should be dev-dependency in the future
+2. From the `setup-rhino3d` directory, run `npm run build`
+3. Commit the changes in `dist/*`
+
