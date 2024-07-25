@@ -41,7 +41,7 @@ async function run() {
     }
       */
 
-    await runScript('script\\setup-rhino.ps1')
+    await runScript('script/setup-rhino.ps1')
 
     // Log the current timestamp, wait, then log the new timestamp
     //core.debug(new Date().toTimeString())
