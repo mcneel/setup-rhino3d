@@ -24916,24 +24916,17 @@ exports["default"] = _default;
 
 /***/ }),
 
-/***/ 3948:
-/***/ ((module, __webpack_exports__, __nccwpck_require__) => {
+/***/ 1713:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-"use strict";
-// ESM COMPAT FLAG
-__nccwpck_require__.r(__webpack_exports__);
-
-;// CONCATENATED MODULE: external "child_process"
-const external_child_process_namespaceObject = require("child_process");
-;// CONCATENATED MODULE: ./src/main.js
-/* module decorator */ module = __nccwpck_require__.hmd(module);
 const core = __nccwpck_require__(2186)
 //const { wait } = require('./wait')
 
 const https = __nccwpck_require__(5687)
 const fs = __nccwpck_require__(7147)
 
-;
+const { exec } = __nccwpck_require__(2081)
+const { stdout, stderr } = __nccwpck_require__(7282)
 
 /**
  * The main function for the action.
@@ -24957,55 +24950,46 @@ async function run() {
 
     // download Rhino
 
-    const url = `https://files.mcneel.com/dujour/exe/20240712/rhino_en-us_8.9.24194.18121.exe`
-    const fileName = 'rhino.exe'
-
-    await downloadRhino(url, fileName)
-    await installRhino(fileName)
-
-    const file = fs.createWriteStream('rhino.exe')
-    const request = https.get(
-      `https://files.mcneel.com/dujour/exe/20240712/rhino_en-us_8.9.24194.18121.exe`,
-      function (response) {
-        response.pipe(file)
-
-        file.on('finish', async () => {
-          file.close()
-          console.log('Download Completed')
-          const stats = fs.statSync('rhino.exe')
-          const fileSizeInMb = stats.size / 1024 ** 2
-          console.log(`rhino.exe size: ${fileSizeInMb} MB`)
-
-          await installRhino('rhino.exe')
-        })
-      }
-    )
-
+    const url =
+      'https://files.mcneel.com/dujour/exe/20240712/rhino_en-us_8.9.24194.18121.exe' //`https://files.mcneel.com/dujour/exe/20240712/rhino_en-us_8.9.24194.18121.exe`
+    const fileName = 'rhino_setup.exe'
     /*
+    await downloadRhino(url, fileName)
+    if(await installRhino(fileName)) {
+      console.log('installed')
+    } else {
+      console-log('failed install')
+    }
+      */
+
+    await runScript('./script/setup-rhino.ps1')
+
     // Log the current timestamp, wait, then log the new timestamp
     core.debug(new Date().toTimeString())
     await wait(parseInt(ms, 10))
     core.debug(new Date().toTimeString())
-    */
 
     // Set outputs for other workflow steps to use
-    core.setOutput('time', new Date().toTimeString())
+    // core.setOutput('time', new Date().toTimeString())
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message)
   }
 }
 
+/*
 const downloadRhino = async (url, fileName) => {
   return new Promise(resolve => {
     const file = fs.createWriteStream(fileName)
+    let received_bytes = 0;
+    let total_bytes = 0;
     const request = https.get(url, function (response) {
       response.pipe(file)
 
       file.on('finish', () => {
         file.close()
         console.log('Download Completed')
-        const stats = fs.statSync('rhino.exe')
+        const stats = fs.statSync(fileName)
         const fileSizeInMb = stats.size / 1024 ** 2
         console.log(`rhino.exe size: ${fileSizeInMb} MB`)
         resolve(true)
@@ -25026,19 +25010,37 @@ const downloadRhino = async (url, fileName) => {
   })
 }
 
-const installRhino = async rhinoPath => {
+const installRhino = async (rhinoPath) => {
   return new Promise(resolve => {
     const ps =
-      'Start-Process -FilePath' +
+      "Start-Process -FilePath " +
       rhinoPath +
       " -ArgumentList '-passive', '-norestart' -Wait"
 
-    ;(0,external_child_process_namespaceObject.exec)(ps, { shell: 'powershell.exe' }, (err, stdout) => {
+    exec(ps, { shell: 'powershell.exe' }, (err, stdout) => {
       if (err) {
         console.log(err)
         resolve(false)
       } else {
         console.log(stdout)
+        resolve(true)
+      }
+    })
+  })
+}
+*/
+
+const runScript = async scriptPath => {
+  return new Promise(resolve => {
+    const ps = '.\\' + scriptPath
+    exec(ps, { shell: 'powershell.exe' }, (err, stdout, stderr) => {
+      console.log(err)
+      console.log(stderr)
+      console.log(stdout)
+
+      if (err || stderr) {
+        resolve(false)
+      } else {
         resolve(true)
       }
     })
@@ -25073,6 +25075,14 @@ module.exports = require("async_hooks");
 
 "use strict";
 module.exports = require("buffer");
+
+/***/ }),
+
+/***/ 2081:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("child_process");
 
 /***/ }),
 
@@ -25193,6 +25203,14 @@ module.exports = require("path");
 
 "use strict";
 module.exports = require("perf_hooks");
+
+/***/ }),
+
+/***/ 7282:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("process");
 
 /***/ }),
 
@@ -26915,8 +26933,8 @@ module.exports = parseParams
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			id: moduleId,
-/******/ 			loaded: false,
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
 /******/ 			exports: {}
 /******/ 		};
 /******/ 	
@@ -26929,40 +26947,11 @@ module.exports = parseParams
 /******/ 			if(threw) delete __webpack_module_cache__[moduleId];
 /******/ 		}
 /******/ 	
-/******/ 		// Flag the module as loaded
-/******/ 		module.loaded = true;
-/******/ 	
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/harmony module decorator */
-/******/ 	(() => {
-/******/ 		__nccwpck_require__.hmd = (module) => {
-/******/ 			module = Object.create(module);
-/******/ 			if (!module.children) module.children = [];
-/******/ 			Object.defineProperty(module, 'exports', {
-/******/ 				enumerable: true,
-/******/ 				set: () => {
-/******/ 					throw new Error('ES Modules may not assign module.exports or exports.*, Use ESM export syntax, instead: ' + module.id);
-/******/ 				}
-/******/ 			});
-/******/ 			return module;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__nccwpck_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
@@ -26974,7 +26963,7 @@ var __webpack_exports__ = {};
 /**
  * The entrypoint for the action.
  */
-const { run } = __nccwpck_require__(3948)
+const { run } = __nccwpck_require__(1713)
 
 run()
 

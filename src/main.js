@@ -4,7 +4,8 @@ const core = require('@actions/core')
 const https = require('https')
 const fs = require('fs')
 
-import { exec } from 'child_process'
+const { exec } = require('child_process')
+const { stdout, stderr } = require('process')
 
 /**
  * The main function for the action.
@@ -28,55 +29,46 @@ async function run() {
 
     // download Rhino
 
-    const url = `https://files.mcneel.com/dujour/exe/20240712/rhino_en-us_8.9.24194.18121.exe`
-    const fileName = 'rhino.exe'
-
-    await downloadRhino(url, fileName)
-    await installRhino(fileName)
-
-    const file = fs.createWriteStream('rhino.exe')
-    const request = https.get(
-      `https://files.mcneel.com/dujour/exe/20240712/rhino_en-us_8.9.24194.18121.exe`,
-      function (response) {
-        response.pipe(file)
-
-        file.on('finish', async () => {
-          file.close()
-          console.log('Download Completed')
-          const stats = fs.statSync('rhino.exe')
-          const fileSizeInMb = stats.size / 1024 ** 2
-          console.log(`rhino.exe size: ${fileSizeInMb} MB`)
-
-          await installRhino('rhino.exe')
-        })
-      }
-    )
-
+    const url =
+      'https://files.mcneel.com/dujour/exe/20240712/rhino_en-us_8.9.24194.18121.exe' //`https://files.mcneel.com/dujour/exe/20240712/rhino_en-us_8.9.24194.18121.exe`
+    const fileName = 'rhino_setup.exe'
     /*
+    await downloadRhino(url, fileName)
+    if(await installRhino(fileName)) {
+      console.log('installed')
+    } else {
+      console-log('failed install')
+    }
+      */
+
+    await runScript('./script/setup-rhino.ps1')
+
     // Log the current timestamp, wait, then log the new timestamp
     core.debug(new Date().toTimeString())
     await wait(parseInt(ms, 10))
     core.debug(new Date().toTimeString())
-    */
 
     // Set outputs for other workflow steps to use
-    core.setOutput('time', new Date().toTimeString())
+    // core.setOutput('time', new Date().toTimeString())
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message)
   }
 }
 
+/*
 const downloadRhino = async (url, fileName) => {
   return new Promise(resolve => {
     const file = fs.createWriteStream(fileName)
+    let received_bytes = 0;
+    let total_bytes = 0;
     const request = https.get(url, function (response) {
       response.pipe(file)
 
       file.on('finish', () => {
         file.close()
         console.log('Download Completed')
-        const stats = fs.statSync('rhino.exe')
+        const stats = fs.statSync(fileName)
         const fileSizeInMb = stats.size / 1024 ** 2
         console.log(`rhino.exe size: ${fileSizeInMb} MB`)
         resolve(true)
@@ -97,10 +89,10 @@ const downloadRhino = async (url, fileName) => {
   })
 }
 
-const installRhino = async rhinoPath => {
+const installRhino = async (rhinoPath) => {
   return new Promise(resolve => {
     const ps =
-      'Start-Process -FilePath' +
+      "Start-Process -FilePath " +
       rhinoPath +
       " -ArgumentList '-passive', '-norestart' -Wait"
 
@@ -110,6 +102,24 @@ const installRhino = async rhinoPath => {
         resolve(false)
       } else {
         console.log(stdout)
+        resolve(true)
+      }
+    })
+  })
+}
+*/
+
+const runScript = async scriptPath => {
+  return new Promise(resolve => {
+    const ps = '.\\' + scriptPath
+    exec(ps, { shell: 'powershell.exe' }, (err, stdout, stderr) => {
+      console.log(err)
+      console.log(stderr)
+      console.log(stdout)
+
+      if (err || stderr) {
+        resolve(false)
+      } else {
         resolve(true)
       }
     })
