@@ -46,7 +46,7 @@ async function run() {
     console.log(__filename)
     console.log(__dirname)
 
-    const scriptPath = path.join(__dirname, 'setup-rhino.ps1')
+    let scriptPath = path.join(__dirname, 'setup-rhino.ps1')
     console.log(scriptPath)
 
     scriptPath += ' -EmailAddress ' + emailAddress + ' -RhinoToken ' + apiKey
