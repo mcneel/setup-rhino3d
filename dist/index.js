@@ -24949,11 +24949,11 @@ async function run() {
     }
 
     // download Rhino
-
+    /*
     const url =
       'https://files.mcneel.com/dujour/exe/20240712/rhino_en-us_8.9.24194.18121.exe' //`https://files.mcneel.com/dujour/exe/20240712/rhino_en-us_8.9.24194.18121.exe`
     const fileName = 'rhino_setup.exe'
-    /*
+    
     await downloadRhino(url, fileName)
     if(await installRhino(fileName)) {
       console.log('installed')
@@ -24961,6 +24961,8 @@ async function run() {
       console-log('failed install')
     }
       */
+
+    console.log(process.cwd)
 
     await runScript('script/setup-rhino.ps1')
 

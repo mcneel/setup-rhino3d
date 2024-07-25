@@ -1,6 +1,8 @@
 # Setup/Install script for installing Rhino
 #Requires -RunAsAdministrator
 
+Write-Host $PWD
+
 #Region funcs
 function Write-Step { 
     Write-Host
