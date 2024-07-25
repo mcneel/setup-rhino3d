@@ -44,7 +44,7 @@ const runScript = async scriptPath => {
         console.log(stderr)
         resolve(false)
       } else {
-        console.log(stdout)
+        //console.log(stdout)
         resolve(true)
       }
     })
