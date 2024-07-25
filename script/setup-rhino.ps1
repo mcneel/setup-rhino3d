@@ -1,7 +1,24 @@
+# Setup/Install script for installing Rhino
+#Requires -RunAsAdministrator
+
+#Region funcs
+function Write-Step { 
+    Write-Host
+    Write-Host "===> "$args[0] -ForegroundColor Green
+    Write-Host
+}
+function Download {
+    param (
+        [Parameter(Mandatory=$true)][string] $url,
+        [Parameter(Mandatory=$true)][string] $output
+    )
+    (New-Object System.Net.WebClient).DownloadFile($url, $output)
+}
+
 # Download and install Rhino
 Write-Step 'Download latest Rhino 8'
 $rhinoDownloadUrl = "https://www.rhino3d.com/www-api/download/direct/?slug=rhino-for-windows/8/latest/" 
-$rhinoSetup = "rhino_setup.exe"
+$rhinoSetup = "c:\temp\rhino_setup.exe"
 Download $rhinoDownloadUrl $rhinoSetup
 
 # Set firewall rule to allow installation
