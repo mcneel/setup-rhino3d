@@ -9,7 +9,7 @@ const { exec } = require('child_process')
 async function run() {
   try {
     // Get the inputs from the workflow file
-    const apiKey = core.getInput('api-key', { required: true })
+    const rhinoToken = core.getInput('rhino-token', { required: true })
     const emailAddress = core.getInput('email-address', { required: true })
     const rhinoVersion = core.getInput('rhino-version', { required: false })
 
@@ -22,7 +22,8 @@ async function run() {
     }
 
     let scriptPath = path.join(__dirname, 'setup-rhino.ps1')
-    scriptPath += ' -EmailAddress ' + emailAddress + ' -RhinoToken ' + apiKey
+    scriptPath +=
+      ' -EmailAddress ' + emailAddress + ' -RhinoToken ' + rhinoToken
 
     await runScript(scriptPath)
 

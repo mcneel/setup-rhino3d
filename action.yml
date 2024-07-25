@@ -3,8 +3,8 @@ description: 'Install Rhino3d on the runner'
 author: 'McNeel'
 
 inputs:
-  api-key: # id of input
-    description: 'Api token generated when setting up core-hour billing'
+  rhino-token: # id of input
+    description: 'token generated when setting up core-hour billing'
     required: true
   email-address: # id of input
     description: 'Email address associated with the user'
