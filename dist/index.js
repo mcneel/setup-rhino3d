@@ -24924,6 +24924,7 @@ const core = __nccwpck_require__(2186)
 
 const https = __nccwpck_require__(5687)
 const fs = __nccwpck_require__(7147)
+const path = __nccwpck_require__(1017)
 
 const { exec } = __nccwpck_require__(2081)
 const { stdout, stderr } = __nccwpck_require__(7282)
@@ -24966,7 +24967,10 @@ async function run() {
     console.log(__filename)
     console.log(__dirname)
 
-    await runScript('script/setup-rhino.ps1')
+    const scriptPath = path.join(__dirname, 'script', 'setup-rhino.ps1')
+    console.log(scriptPath)
+
+    await runScript(scriptPath)
 
     // Log the current timestamp, wait, then log the new timestamp
     //core.debug(new Date().toTimeString())

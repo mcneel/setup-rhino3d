@@ -3,6 +3,7 @@ const core = require('@actions/core')
 
 const https = require('https')
 const fs = require('fs')
+const path = require('path')
 
 const { exec } = require('child_process')
 const { stdout, stderr } = require('process')
@@ -45,7 +46,10 @@ async function run() {
     console.log(__filename)
     console.log(__dirname)
 
-    await runScript('script/setup-rhino.ps1')
+    const scriptPath = path.join(__dirname, 'script', 'setup-rhino.ps1')
+    console.log(scriptPath)
+
+    await runScript(scriptPath)
 
     // Log the current timestamp, wait, then log the new timestamp
     //core.debug(new Date().toTimeString())
