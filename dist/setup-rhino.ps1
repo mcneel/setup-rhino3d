@@ -1,8 +1,6 @@
 # Setup/Install script for installing Rhino
 #Requires -RunAsAdministrator
 
-Write-Host $PWD
-
 param (
     [Parameter(Mandatory=$true)][string] $EmailAddress,
     [Parameter(Mandatory=$true)][string] $RhinoToken,
@@ -22,6 +20,18 @@ function Download {
     )
     (New-Object System.Net.WebClient).DownloadFile($url, $output)
 }
+
+function SetEnvVar {
+    param (
+        [Parameter(Mandatory=$true)][string] $name,
+        [Parameter(Mandatory=$true)][string] $value,
+        [switch] $secret = $false
+    )
+    $print = if ($secret) {"***"} else {$value}
+    Write-Host "Setting environment variable: $name=$print"
+    [System.Environment]::SetEnvironmentVariable($name, $value, "Machine")
+}
+#EndRegion
 
 Write-Step 'Set environment variables'
 SetEnvVar 'RHINO_TOKEN' $RhinoToken -secret
