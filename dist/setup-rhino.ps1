@@ -3,7 +3,7 @@
 
 param (
     [Parameter(Mandatory=$true)][string] $EmailAddress,
-    [Parameter(Mandatory=$true)][string] $RhinoToken,
+    #[Parameter(Mandatory=$true)][string] $RhinoToken,
     [switch] $install = $false
 )
 
@@ -33,12 +33,12 @@ function SetEnvVar {
 }
 #EndRegion
 
-Write-Step 'Set environment variables'
-SetEnvVar 'RHINO_TOKEN' $RhinoToken -secret
+#Write-Step 'Set environment variables'
+#SetEnvVar 'RHINO_TOKEN' $RhinoToken -secret
 
 # Download and install Rhino
 Write-Step 'Download latest Rhino 8'
-$rhinoDownloadUrl = "https://www.rhino3d.com/www-api/download/direct/?slug=rhino-for-windows/8/latest/" 
+$rhinoDownloadUrl = "https://www.rhino3d.com/www-api/download/direct/?slug=rhino-for-windows/8/latest/?email=$EmailAddress" 
 $rhinoSetup = "c:\temp\rhino_setup.exe"
 Download $rhinoDownloadUrl $rhinoSetup
 

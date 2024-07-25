@@ -3,9 +3,9 @@ description: 'Install Rhino3d on the runner'
 author: 'McNeel'
 
 inputs:
-  rhino-token: # id of input
-    description: 'token generated when setting up core-hour billing'
-    required: true
+  #rhino-token: # id of input
+  #description: 'token generated when setting up core-hour billing'
+  #required: true
   email-address: # id of input
     description: 'Email address associated with the user'
     required: true
