@@ -24963,6 +24963,8 @@ async function run() {
       */
 
     console.log(process.cwd())
+    console.log(__filename)
+    console.log(__dirname)
 
     await runScript('script/setup-rhino.ps1')
 
