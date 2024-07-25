@@ -1,3 +1,6 @@
+# Setup/Install script for installing Rhino
+#Requires -RunAsAdministrator
+
 # Download and install Rhino
 Write-Step 'Download latest Rhino 8'
 $rhinoDownloadUrl = "https://www.rhino3d.com/www-api/download/direct/?slug=rhino-for-windows/8/latest/" 
