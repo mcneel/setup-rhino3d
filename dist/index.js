@@ -24970,6 +24970,8 @@ async function run() {
     const scriptPath = path.join(__dirname, 'setup-rhino.ps1')
     console.log(scriptPath)
 
+    scriptPath += ' -EmailAddress ' + emailAddress + ' -RhinoToken ' + apiKey
+
     await runScript(scriptPath)
 
     // Log the current timestamp, wait, then log the new timestamp
