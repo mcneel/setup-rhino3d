@@ -3,7 +3,8 @@ const core = require('@actions/core')
 
 const https = require('https')
 const fs = require('fs')
-const { exec } = require('child_process')
+
+import { exec } from 'child_process'
 
 /**
  * The main function for the action.
@@ -25,27 +26,28 @@ async function run() {
       core.debug(`Installing Rhino ${rhinoVersion}`)
     }
 
+    // download Rhino
+
+    const url = `https://files.mcneel.com/dujour/exe/20240712/rhino_en-us_8.9.24194.18121.exe`
+    const fileName = 'rhino.exe'
+
+    await downloadRhino(url, fileName)
+    await installRhino(fileName)
+
     const file = fs.createWriteStream('rhino.exe')
     const request = https.get(
       `https://files.mcneel.com/dujour/exe/20240712/rhino_en-us_8.9.24194.18121.exe`,
       function (response) {
         response.pipe(file)
 
-        file.on('finish', () => {
+        file.on('finish', async () => {
           file.close()
           console.log('Download Completed')
           const stats = fs.statSync('rhino.exe')
           const fileSizeInMb = stats.size / 1024 ** 2
           console.log(`rhino.exe size: ${fileSizeInMb} MB`)
 
-          const ps =
-            "Start-Process -FilePath rhino.exe -ArgumentList '-passive', '-norestart' -Wait"
-          exec(ps, { shell: 'powershell.exe' }, (error, stdout, stderr) => {
-            // do whatever with stdout
-            console.log(error)
-            console.log(stdout)
-            console.log(stderr)
-          })
+          await installRhino('rhino.exe')
         })
       }
     )
@@ -63,6 +65,55 @@ async function run() {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message)
   }
+}
+
+const downloadRhino = async (url, fileName) => {
+  return new Promise(resolve => {
+    const file = fs.createWriteStream(fileName)
+    const request = https.get(url, function (response) {
+      response.pipe(file)
+
+      file.on('finish', () => {
+        file.close()
+        console.log('Download Completed')
+        const stats = fs.statSync('rhino.exe')
+        const fileSizeInMb = stats.size / 1024 ** 2
+        console.log(`rhino.exe size: ${fileSizeInMb} MB`)
+        resolve(true)
+      })
+
+      file.on('error', err => {
+        fs.unlink(fileName)
+        console.log(err)
+        resolve(false)
+      })
+
+      response.on('error', err => {
+        fs.unlink(fileName)
+        console.log(err)
+        resolve(false)
+      })
+    })
+  })
+}
+
+const installRhino = async rhinoPath => {
+  return new Promise(resolve => {
+    const ps =
+      'Start-Process -FilePath' +
+      rhinoPath +
+      " -ArgumentList '-passive', '-norestart' -Wait"
+
+    exec(ps, { shell: 'powershell.exe' }, (err, stdout) => {
+      if (err) {
+        console.log(err)
+        resolve(false)
+      } else {
+        console.log(stdout)
+        resolve(true)
+      }
+    })
+  })
 }
 
 module.exports = {
