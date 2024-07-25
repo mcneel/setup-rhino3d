@@ -3,6 +3,12 @@
 
 Write-Host $PWD
 
+param (
+    [Parameter(Mandatory=$true)][string] $EmailAddress,
+    [Parameter(Mandatory=$true)][string] $RhinoToken,
+    [switch] $install = $false
+)
+
 #Region funcs
 function Write-Step { 
     Write-Host
@@ -16,6 +22,9 @@ function Download {
     )
     (New-Object System.Net.WebClient).DownloadFile($url, $output)
 }
+
+Write-Step 'Set environment variables'
+SetEnvVar 'RHINO_TOKEN' $RhinoToken -secret
 
 # Download and install Rhino
 Write-Step 'Download latest Rhino 8'
