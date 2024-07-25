@@ -119,7 +119,7 @@ const installRhino = async (rhinoPath) => {
 
 const runScript = async scriptPath => {
   return new Promise(resolve => {
-    const ps = '.\\' + scriptPath
+    const ps = scriptPath
     exec(ps, { shell: 'powershell.exe' }, (err, stdout, stderr) => {
       console.log(err)
       console.log(stderr)
