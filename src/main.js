@@ -41,7 +41,7 @@ async function run() {
     }
       */
 
-    console.log(process.cwd)
+    console.log(process.cwd())
 
     await runScript('script/setup-rhino.ps1')
 
