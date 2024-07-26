@@ -6,18 +6,6 @@ This action supports installing Rhino from version 8.8.
 
 ## Inputs
 
-### `api-key`
-
-**Required** The apikey you create when setting up core-hour billing. Please see
-[this article](https://developer.rhino3d.com/guides/compute/core-hour-billing/#setting-up-core-hour-billing)
-for instructions on setting up core-hour billing.
-
-This api key should be stored as a repository secret. For more information on
-setting up repository secrets, see
-[this article](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions?tool=webui#creating-secrets-for-a-repository).
-See below for an example on how to use this api key, stored as a repository
-secret, in your workflow.
-
 ### email-address
 
 **Required** The email of the associated user.
@@ -28,19 +16,35 @@ secret, in your workflow.
 format, for example 8.8. If no `rhino-version` is specified, this action will
 install the latest service release of Rhino.
 
-## Outputs
+NOTE: Currently only using whaever the latest version of Rhino that is published. See #2
 
-### `time`
+### A note about the Rhino Token
 
-The time we greeted you.
+The workflow using this action should set an env variable with the Rhino Token you create when setting up core-hour billing. Please see
+[this article](https://developer.rhino3d.com/guides/compute/core-hour-billing/#setting-up-core-hour-billing)
+for instructions on setting up core-hour billing.
+
+This Rhino Token should be stored as a repository secret. For more information on
+setting up repository secrets, see
+[this article](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions?tool=webui#creating-secrets-for-a-repository).
+See below for an example on how to use this api key, stored as a repository
+secret, in your workflow.
 
 ## Example usage
 
 ```yaml
-uses: mcneel/setup-rhino3dm@0.0.1
-with:
-  api-key: ${{ secrets.RhinoApiKey }} #required. You can name your secret whatever you like when you set it up.
-  rhino-version: 8.9 #optional. if this is not set, this action will default to the latest service release
+
+env:
+  RHINO_TOKEN: ${{ secrets.RHINO_TOKEN }}
+
+jobs:
+    build:
+      - name: Install Rhino
+        uses: mcneel/setup-rhino3d@v0.0.3-beta
+        id: setup_rhino
+        with:
+          rhino-version: 8.9
+          email-address: ${{ secrets.EMAIL_ADDRESS }}
 ```
 
 ## Development
@@ -63,13 +67,15 @@ need to perform some initial setup steps before you can develop your action.
    npm install
    ```
 
-1. 🏗️ Package the JavaScript for distribution
+2. 🏗️ Package the JavaScript for distribution
 
    ```bash
    npm run bundle
    ```
 
-1. ✅ Run the tests
+NOTE: At the time of writing, this will not copy script/setup-rhino.ps1 to dist/setup-rhino.ps1. If you change this script, you should move over the changes manually
+
+3. ✅ Run the tests
 
    ```bash
    $ npm test
@@ -81,3 +87,7 @@ need to perform some initial setup steps before you can develop your action.
 
    ...
    ```
+
+### Committing Changes and tags
+
+Users expect to consume this action via a version number associated with a tag. Do not forget to add a tag to any commit you wish to use or have users be able to use.
