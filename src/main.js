@@ -1,6 +1,10 @@
 const core = require('@actions/core')
-const path = require('path')
-const { exec } = require('child_process')
+//import {core, platform} from '@actions/core'
+const path = require('node:path')
+//import {path} from 'path'
+const { exec } = require('node:child_process')
+//import {exec} from 'child_process'
+const os = require('node:os')
 
 /**
  * The main function for the action.
@@ -32,13 +36,37 @@ async function run() {
     command += ' -EmailAddress ' + emailAddress //+ ' -RhinoToken ' + rhinoToken
     */
 
-    let command = path.join(__dirname, 'setup-rhino.ps1')
-    command = core.toWin32Path(command)
-    command += ' -EmailAddress ' + emailAddress //+ ' -RhinoToken ' + rhinoToken
+    let scriptName = 'setup-rhino'
+    let commandArgs = ''
+    let shell = null
 
-    core.debug(`ps command: ${command}`)
+    switch (os.platform()) {
+      case 'win32':
+        scriptName += '.ps1'
+        commandArgs = ' -EmailAddress ' + emailAddress //+ ' -RhinoToken ' + rhinoToken
+        shell = { shell: 'powershell.exe' }
+        break
+      case 'darwin':
+        scriptName += '.sh'
+        shell = { shell: '/bin/sh' }
+        core.setFailed('macOS is not supported')
+        break
+      case 'linux':
+        scriptName += '.sh'
+        shell = { shell: '/bin/sh' }
+        core.setFailed('Linux is not supported')
+        break
+      default:
+        core.setFailed('Unsupported platform')
+    }
 
-    const res = await runScript(command, { shell: 'powershell.exe' })
+    let command = path.join(__dirname, scriptName)
+    command = core.toPlatformPath(command)
+    command += commandArgs
+
+    core.debug(` command: ${command}`)
+
+    const res = await runScript(command, shell)
     if (res.hasOwnProperty('err') || res.hasOwnProperty('stderr')) {
       core.setFailed(res)
     } else {

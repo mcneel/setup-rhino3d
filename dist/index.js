@@ -24920,8 +24920,12 @@ exports["default"] = _default;
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const core = __nccwpck_require__(2186)
-const path = __nccwpck_require__(1017)
-const { exec } = __nccwpck_require__(2081)
+//import {core, platform} from '@actions/core'
+const path = __nccwpck_require__(9411)
+//import {path} from 'path'
+const { exec } = __nccwpck_require__(7718)
+//import {exec} from 'child_process'
+const os = __nccwpck_require__(612)
 
 /**
  * The main function for the action.
@@ -24953,13 +24957,37 @@ async function run() {
     command += ' -EmailAddress ' + emailAddress //+ ' -RhinoToken ' + rhinoToken
     */
 
-    let command = path.join(__dirname, 'setup-rhino.ps1')
-    command = core.toWin32Path(command)
-    command += ' -EmailAddress ' + emailAddress //+ ' -RhinoToken ' + rhinoToken
+    let scriptName = 'setup-rhino'
+    let commandArgs = ''
+    let shell = null
 
-    core.debug(`ps command: ${command}`)
+    switch (os.platform()) {
+      case 'win32':
+        scriptName += '.ps1'
+        commandArgs = ' -EmailAddress ' + emailAddress //+ ' -RhinoToken ' + rhinoToken
+        shell = { shell: 'powershell.exe' }
+        break
+      case 'darwin':
+        scriptName += '.sh'
+        shell = { shell: '/bin/sh' }
+        core.setFailed('macOS is not supported')
+        break
+      case 'linux':
+        scriptName += '.sh'
+        shell = { shell: '/bin/sh' }
+        core.setFailed('Linux is not supported')
+        break
+      default:
+        core.setFailed('Unsupported platform')
+    }
 
-    const res = await runScript(command, { shell: 'powershell.exe' })
+    let command = path.join(__dirname, scriptName)
+    command = core.toPlatformPath(command)
+    command += commandArgs
+
+    core.debug(` command: ${command}`)
+
+    const res = await runScript(command, shell)
     if (res.hasOwnProperty('err') || res.hasOwnProperty('stderr')) {
       core.setFailed(res)
     } else {
@@ -25013,14 +25041,6 @@ module.exports = require("async_hooks");
 
 "use strict";
 module.exports = require("buffer");
-
-/***/ }),
-
-/***/ 2081:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("child_process");
 
 /***/ }),
 
@@ -25096,11 +25116,35 @@ module.exports = require("net");
 
 /***/ }),
 
+/***/ 7718:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:child_process");
+
+/***/ }),
+
 /***/ 5673:
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("node:events");
+
+/***/ }),
+
+/***/ 612:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:os");
+
+/***/ }),
+
+/***/ 9411:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:path");
 
 /***/ }),
 
