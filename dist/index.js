@@ -24950,8 +24950,6 @@ async function run() {
 
     const res = await runScript(__nccwpck_require__.ab + "setup-rhino.ps1", { shell: 'powershell.exe' })
 
-    xonsole.log(res)
-
     if (res.hasOwnProperty('error') || res.hasOwnProperty('stderr')) {
       core.debug(res)
       core.setFailed(res)

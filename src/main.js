@@ -33,8 +33,6 @@ async function run() {
 
     const res = await runScript(command, { shell: 'powershell.exe' })
 
-    xonsole.log(res)
-
     if (res.hasOwnProperty('error') || res.hasOwnProperty('stderr')) {
       core.debug(res)
       core.setFailed(res)
