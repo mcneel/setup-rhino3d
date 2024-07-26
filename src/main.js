@@ -38,7 +38,12 @@ async function run() {
 
     core.debug(`ps command: ${command}`)
 
-    await runScript(command, { shell: 'powershell.exe' })
+    const res = await runScript(command, { shell: 'powershell.exe' })
+    if (res.hasOwnProperty('err') || res.hasOwnProperty('stderr')) {
+      core.setFailed(res)
+    } else {
+      console.log(res.stdout)
+    }
 
     core.debug(new Date().toTimeString())
   } catch (error) {
@@ -48,15 +53,12 @@ async function run() {
 }
 
 const runScript = async (command, shell) => {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     exec(command, shell, (err, stdout, stderr) => {
       if (err || stderr) {
-        console.error(err)
-        console.error(stderr)
-        resolve(false)
+        reject({ err, stderr })
       } else {
-        console.log(stdout)
-        resolve(true)
+        resolve({ stdout })
       }
     })
   })
