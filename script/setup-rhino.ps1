@@ -37,15 +37,15 @@ function SetEnvVar {
 #SetEnvVar 'RHINO_TOKEN' $RhinoToken -secret
 
 # Download and install Rhino
-Write-Step 'Download latest Rhino 8'
+#Write-Step 'Download latest Rhino 8'
 $rhinoDownloadUrl = "https://www.rhino3d.com/www-api/download/direct/?slug=rhino-for-windows/8/latest/?email=$EmailAddress" 
 $rhinoSetup = "c:\temp\rhino_setup.exe"
 Download $rhinoDownloadUrl $rhinoSetup
 
-# Set firewall rule to allow installation
-New-NetFirewallRule -DisplayName "Rhino 8 Installer" -Direction Inbound -Program $rhinoSetup -Action Allow
+# Set firewall rule to allow installation, but suppress output
+[void](New-NetFirewallRule -DisplayName "Rhino 8 Installer" -Direction Inbound -Program $rhinoSetup -Action Allow)
 
-Write-Step 'Installing Rhino'
+#Write-Step 'Installing Rhino'
 # Automated install (https://wiki.mcneel.com/rhino/installingrhino/8)
 Start-Process -FilePath $rhinoSetup -ArgumentList '-passive', '-norestart' -Wait
 # delete installer

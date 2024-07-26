@@ -21,10 +21,18 @@ async function run() {
       core.debug(`Installing Rhino ${rhinoVersion}`)
     }
 
-    let scriptPath = path.join(__dirname, 'setup-rhino.ps1')
-    scriptPath += ' -EmailAddress ' + emailAddress //+ ' -RhinoToken ' + rhinoToken
+    let command = path.join(
+      path.dirname(__dirname),
+      'script',
+      'setup-rhino.ps1'
+    )
+    command += ' -EmailAddress ' + emailAddress //+ ' -RhinoToken ' + rhinoToken
 
-    await runScript(scriptPath)
+    const res = await runScript(command, { shell: 'powershell.exe' })
+
+    if (res.hasOwnProperty('error') || res.hasOwnProperty('stderr'))
+      core.setFailed(res)
+    else console.log(res.stdout)
 
     core.debug(new Date().toTimeString())
   } catch (error) {
@@ -33,19 +41,13 @@ async function run() {
   }
 }
 
-const runScript = async scriptPath => {
-  return new Promise(resolve => {
-    const ps = scriptPath
-    exec(ps, { shell: 'powershell.exe' }, (err, stdout, stderr) => {
-      //console.log(stdout)
-
-      if (err || stderr) {
-        console.log(err)
-        console.log(stderr)
-        resolve(false)
+const runScript = async (command, shell) => {
+  return new Promise((resolve, reject) => {
+    exec(command, shell, (error, stdout, stderr) => {
+      if (error || stderr) {
+        reject({ error, stderr })
       } else {
-        //console.log(stdout)
-        resolve(true)
+        resolve({ stdout })
       }
     })
   })
