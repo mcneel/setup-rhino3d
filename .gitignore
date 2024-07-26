@@ -102,4 +102,3 @@ __tests__/runner/*
 .vscode
 *.code-workspace
 rhino.exe
-dist/setup-rhino.ps1

@@ -26,6 +26,7 @@ async function run() {
       'script',
       'setup-rhino.ps1'
     )
+    command = core.toWin32Path(command)
     command += ' -EmailAddress ' + emailAddress //+ ' -RhinoToken ' + rhinoToken
 
     core.debug(`ps command: ${command}`)

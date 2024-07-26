@@ -24943,6 +24943,7 @@ async function run() {
     }
 
     let command = __nccwpck_require__.ab + "setup-rhino.ps1"
+    command = core.toWin32Path(__nccwpck_require__.ab + "setup-rhino.ps1")
     command += ' -EmailAddress ' + emailAddress //+ ' -RhinoToken ' + rhinoToken
 
     core.debug(`ps command: ${command}`)
