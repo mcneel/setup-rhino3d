@@ -24945,7 +24945,7 @@ async function run() {
     let command = __nccwpck_require__.ab + "setup-rhino.ps1"
     command += ' -EmailAddress ' + emailAddress //+ ' -RhinoToken ' + rhinoToken
 
-    core.debug(__nccwpck_require__.ab + "setup-rhino.ps1")
+    core.debug(`ps command: ${command}`)
 
     const res = await runScript(__nccwpck_require__.ab + "setup-rhino.ps1", { shell: 'powershell.exe' })
 

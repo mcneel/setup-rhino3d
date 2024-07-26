@@ -28,7 +28,7 @@ async function run() {
     )
     command += ' -EmailAddress ' + emailAddress //+ ' -RhinoToken ' + rhinoToken
 
-    core.debug(command)
+    core.debug(`ps command: ${command}`)
 
     const res = await runScript(command, { shell: 'powershell.exe' })
 
