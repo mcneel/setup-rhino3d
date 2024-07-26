@@ -32,7 +32,7 @@ async function run() {
 
     core.debug(`ps command: ${command}`)
 
-    await runScript(command, { shell: 'powershell.exe' })
+    await runScript(command)
 
     core.debug(new Date().toTimeString())
   } catch (error) {
@@ -41,11 +41,11 @@ async function run() {
   }
 }
 
-const runScript = async (command, shell) => {
+const runScript = async command => {
   return new Promise(resolve => {
-    exec(command, shell, (error, stdout, stderr) => {
-      if (error || stderr) {
-        console.error(error)
+    exec(command, { shell: 'powershell.exe' }, (err, stdout, stderr) => {
+      if (err || stderr) {
+        console.error(err)
         console.error(stderr)
         resolve(false)
       } else {

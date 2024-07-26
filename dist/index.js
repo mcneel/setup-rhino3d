@@ -24929,6 +24929,7 @@ const { exec } = __nccwpck_require__(2081)
  */
 async function run() {
   try {
+    core.debug(new Date().toTimeString())
     // Get the inputs from the workflow file
     //const rhinoToken = core.getInput('rhino-token', { required: true })
     const emailAddress = core.getInput('email-address', { required: true })
@@ -24948,7 +24949,7 @@ async function run() {
 
     core.debug(`ps command: ${command}`)
 
-    await runScript(__nccwpck_require__.ab + "setup-rhino.ps1", { shell: 'powershell.exe' })
+    await runScript(__nccwpck_require__.ab + "setup-rhino.ps1")
 
     core.debug(new Date().toTimeString())
   } catch (error) {
@@ -24957,11 +24958,11 @@ async function run() {
   }
 }
 
-const runScript = async (command, shell) => {
+const runScript = async command => {
   return new Promise(resolve => {
-    exec(command, shell, (error, stdout, stderr) => {
-      if (error || stderr) {
-        console.error(error)
+    exec(command, { shell: 'powershell.exe' }, (err, stdout, stderr) => {
+      if (err || stderr) {
+        console.error(err)
         console.error(stderr)
         resolve(false)
       } else {
