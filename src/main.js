@@ -8,6 +8,7 @@ const { exec } = require('child_process')
  */
 async function run() {
   try {
+    core.debug(new Date().toTimeString())
     // Get the inputs from the workflow file
     //const rhinoToken = core.getInput('rhino-token', { required: true })
     const emailAddress = core.getInput('email-address', { required: true })
@@ -31,14 +32,7 @@ async function run() {
 
     core.debug(`ps command: ${command}`)
 
-    let res
-    try {
-      res = await runScript(command, { shell: 'powershell.exe' })
-      console.log(res.stdout)
-    } catch (error) {
-      core.debug(`error in running script: ${res}`)
-      core.setFailed(error.message)
-    }
+    await runScript(command, { shell: 'powershell.exe' })
 
     core.debug(new Date().toTimeString())
   } catch (error) {
@@ -48,12 +42,15 @@ async function run() {
 }
 
 const runScript = async (command, shell) => {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     exec(command, shell, (error, stdout, stderr) => {
       if (error || stderr) {
-        reject({ error, stderr })
+        console.error(error)
+        console.error(stderr)
+        resolve(false)
       } else {
-        resolve({ stdout })
+        console.log(stdout)
+        resolve(true)
       }
     })
   })

@@ -24948,14 +24948,7 @@ async function run() {
 
     core.debug(`ps command: ${command}`)
 
-    let res
-    try {
-      res = await runScript(__nccwpck_require__.ab + "setup-rhino.ps1", { shell: 'powershell.exe' })
-      console.log(res.stdout)
-    } catch (error) {
-      core.debug(`error in running script: ${res}`)
-      core.setFailed(error.message)
-    }
+    await runScript(__nccwpck_require__.ab + "setup-rhino.ps1", { shell: 'powershell.exe' })
 
     core.debug(new Date().toTimeString())
   } catch (error) {
@@ -24965,12 +24958,15 @@ async function run() {
 }
 
 const runScript = async (command, shell) => {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     exec(command, shell, (error, stdout, stderr) => {
       if (error || stderr) {
-        reject({ error, stderr })
+        console.error(error)
+        console.error(stderr)
+        resolve(false)
       } else {
-        resolve({ stdout })
+        console.log(stdout)
+        resolve(true)
       }
     })
   })
