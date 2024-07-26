@@ -24945,11 +24945,16 @@ async function run() {
     let command = __nccwpck_require__.ab + "setup-rhino.ps1"
     command += ' -EmailAddress ' + emailAddress //+ ' -RhinoToken ' + rhinoToken
 
+    core.debug(__nccwpck_require__.ab + "setup-rhino.ps1")
+
     const res = await runScript(__nccwpck_require__.ab + "setup-rhino.ps1", { shell: 'powershell.exe' })
 
-    if (res.hasOwnProperty('error') || res.hasOwnProperty('stderr'))
+    xonsole.log(res)
+
+    if (res.hasOwnProperty('error') || res.hasOwnProperty('stderr')) {
+      core.debug(res)
       core.setFailed(res)
-    else console.log(res.stdout)
+    } else console.log(res.stdout)
 
     core.debug(new Date().toTimeString())
   } catch (error) {

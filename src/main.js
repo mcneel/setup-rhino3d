@@ -28,11 +28,16 @@ async function run() {
     )
     command += ' -EmailAddress ' + emailAddress //+ ' -RhinoToken ' + rhinoToken
 
+    core.debug(command)
+
     const res = await runScript(command, { shell: 'powershell.exe' })
 
-    if (res.hasOwnProperty('error') || res.hasOwnProperty('stderr'))
+    xonsole.log(res)
+
+    if (res.hasOwnProperty('error') || res.hasOwnProperty('stderr')) {
+      core.debug(res)
       core.setFailed(res)
-    else console.log(res.stdout)
+    } else console.log(res.stdout)
 
     core.debug(new Date().toTimeString())
   } catch (error) {
