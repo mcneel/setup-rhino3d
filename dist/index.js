@@ -24943,13 +24943,22 @@ async function run() {
       core.debug(`Installing Rhino ${rhinoVersion}`)
     }
 
-    let command = __nccwpck_require__.ab + "setup-rhino.ps1"
-    command = core.toWin32Path(__nccwpck_require__.ab + "setup-rhino.ps1")
+    /*
+    let command = path.join(
+      path.dirname(__dirname),
+      'script',
+      'setup-rhino.ps1'
+    )
+    command = core.toWin32Path(command)
+    command += ' -EmailAddress ' + emailAddress //+ ' -RhinoToken ' + rhinoToken
+    */
+
+    let command = path.join(__dirname, 'setup-rhino.ps1')
     command += ' -EmailAddress ' + emailAddress //+ ' -RhinoToken ' + rhinoToken
 
     core.debug(`ps command: ${command}`)
 
-    await runScript(__nccwpck_require__.ab + "setup-rhino.ps1")
+    await runScript(command)
 
     core.debug(new Date().toTimeString())
   } catch (error) {
