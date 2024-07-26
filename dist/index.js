@@ -24948,12 +24948,14 @@ async function run() {
 
     core.debug(`ps command: ${command}`)
 
-    const res = await runScript(__nccwpck_require__.ab + "setup-rhino.ps1", { shell: 'powershell.exe' })
-
-    if (res.hasOwnProperty('error') || res.hasOwnProperty('stderr')) {
-      core.debug(res)
-      core.setFailed(res)
-    } else console.log(res.stdout)
+    let res
+    try {
+      res = await runScript(__nccwpck_require__.ab + "setup-rhino.ps1", { shell: 'powershell.exe' })
+      console.log(res.stdout)
+    } catch (error) {
+      core.debug(`error in running script: ${res}`)
+      core.setFailed(error.message)
+    }
 
     core.debug(new Date().toTimeString())
   } catch (error) {

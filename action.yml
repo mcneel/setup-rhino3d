@@ -14,10 +14,7 @@ inputs:
     required: false
     default: '8.9'
 
-#todo: change these options or remove them
-outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+#todo: do we need any outputs?
 
 runs:
   using: 'node20'
