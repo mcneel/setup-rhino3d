@@ -24954,6 +24954,7 @@ async function run() {
     */
 
     let command = path.join(__dirname, 'setup-rhino.ps1')
+    command = core.toWin32Path(command)
     command += ' -EmailAddress ' + emailAddress //+ ' -RhinoToken ' + rhinoToken
 
     core.debug(`ps command: ${command}`)

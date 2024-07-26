@@ -52,4 +52,4 @@ Start-Process -FilePath $rhinoSetup -ArgumentList '-passive', '-norestart' -Wait
 Remove-Item $rhinoSetup
 # Print installed version number
 $installedVersion = [Version] (get-itemproperty -Path HKLM:\SOFTWARE\McNeel\Rhinoceros\8.0\Install -name "version").Version
-Write-Step "Successfully installed $installedVersion"
+Write-Step "Successfully installed Rhino $installedVersion"
