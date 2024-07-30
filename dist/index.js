@@ -24933,19 +24933,11 @@ const os = __nccwpck_require__(612)
  */
 async function run() {
   try {
-    core.debug(new Date().toTimeString())
-    // Get the inputs from the workflow file
-    //const rhinoToken = core.getInput('rhino-token', { required: true })
-    const emailAddress = core.getInput('email-address', { required: true })
-    const rhinoVersion = core.getInput('rhino-version', { required: false })
+    console.log('Downloading and installing the latest Rhino 3d...')
 
-    // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-    if (!rhinoVersion) {
-      core.debug('No Rhino version provided, defaulting to 8.9')
-      rhinoVersion = '8.9'
-    } else {
-      core.debug(`Installing Rhino ${rhinoVersion}`)
-    }
+    // Get the inputs from the workflow file
+    const emailAddress = core.getInput('email-address', { required: true })
+    //const rhinoVersion = core.getInput('rhino-version', { required: false })
 
     /*
     let command = path.join(
@@ -24964,17 +24956,18 @@ async function run() {
     switch (os.platform()) {
       case 'win32':
         scriptName += '.ps1'
-        commandArgs = ' -EmailAddress ' + emailAddress //+ ' -RhinoToken ' + rhinoToken
+        commandArgs = ' -EmailAddress ' + emailAddress
         shell = { shell: 'powershell.exe' }
+        core.debug(`Script name is ${scriptName}`)
         break
       case 'darwin':
-        scriptName += '.sh'
-        shell = { shell: '/bin/sh' }
+        //scriptName += '.sh'
+        //shell = { shell: '/bin/sh' }
         core.setFailed('macOS is not supported')
         break
       case 'linux':
-        scriptName += '.sh'
-        shell = { shell: '/bin/sh' }
+        //scriptName += '.sh'
+        //shell = { shell: '/bin/sh' }
         core.setFailed('Linux is not supported')
         break
       default:
@@ -25014,7 +25007,8 @@ const runScript = async (command, shell) => {
 }
 
 module.exports = {
-  run
+  run,
+  runScript
 }
 
 

@@ -3,16 +3,9 @@ description: 'Install Rhino3d on the runner'
 author: 'McNeel'
 
 inputs:
-  #rhino-token: # id of input
-  #description: 'token generated when setting up core-hour billing'
-  #required: true
   email-address: # id of input
     description: 'Email address associated with the user'
     required: true
-  rhino-version:
-    description: 'Rhino version to install'
-    required: false
-    default: '8.9'
 
 #todo: do we need any outputs?
 
