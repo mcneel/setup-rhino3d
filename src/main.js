@@ -58,29 +58,12 @@ const run = async () => {
 
     core.debug(`command: ${command}`)
 
-    // const res = await runScript(command, shell)
-
-    // core.debug(res)
-
-    /*
-    if (
-      Object.prototype.hasOwnProperty.call(res, 'message') &&
-      (Object.prototype.hasOwnProperty.call(res.message, 'err') ||
-        Object.prototype.hasOwnProperty.call(res.message, 'stderr'))
-    ) {
-      core.setFailed(res)
-    } else {
-      console.log(res.stdout)
-    }
-
-  */
-
     try {
       const { stdout, stderr } = await execAsync(command, shell)
-      console.log(`stderr: ${stderr.trim()}`)
-      console.log(`stderr length: ${stderr.length}`)
-      console.log(`stdout: ${stdout.trim()}`)
-      console.log(`stdout length: ${stdout.length}`)
+      if (stderr.trim().length > 0) {
+        core.setFailed(stderr)
+      }
+      console.log(stdout.trim())
     } catch (error) {
       core.setFailed(error)
     }
@@ -92,25 +75,7 @@ const run = async () => {
   }
 }
 
-/*
-const runScript = async (command, shell) => {
-  return new Promise((resolve, reject) => {
-    if( !command ) {
-      reject(new Error('command argument is empty, null, or undefined'))
-    }
-    if( !shell ) {
-      reject(new Error('shell argument is empty, null, or undefined'))
-    }
-    exec(command, shell, (err, stdout, stderr) => {
-      if (err || stderr) {
-        reject(new Error({ err, stderr }))
-      } else {
-        resolve({ stdout })
-      }
-    })
-  })
-}
-*/
 module.exports = {
-  run
+  run,
+  execAsync
 }

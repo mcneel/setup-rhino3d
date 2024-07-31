@@ -12,11 +12,9 @@ const setFailedMock = jest.spyOn(core, 'setFailed').mockImplementation()
 // const setOutputMock = jest.spyOn(core, 'setOutput').mockImplementation()
 const platformMock = jest.spyOn(os, 'platform').mockImplementation()
 
-// Mock the action's main function
+// Mock the action's main functions
 const runMock = jest.spyOn(main, 'run')
-
-// Mock the action's runScript function
-// const runScriptMock = jest.spyOn(main, 'runScript').mockImplementation()
+const execMock = jest.spyOn(main , 'execAsync')
 
 describe('action', () => {
   beforeEach(() => {
@@ -57,6 +55,15 @@ describe('action', () => {
     await main.run()
     expect(runMock).toHaveReturned()
     expect(debugMock).toHaveBeenCalledWith('Script name is setup-rhino.ps1')
+  })
+
+  it('execAsync is called', async () => {
+
+    execMock.mockImplementation('','')
+    await main.execAsync()
+    expect(execMock).toHaveBeenCalledTimes(1)
+    expect(execMock).toHaveReturned()
+
   })
 
   // TODO: Add tests related to validating email address
