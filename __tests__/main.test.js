@@ -16,7 +16,7 @@ const platformMock = jest.spyOn(os, 'platform').mockImplementation()
 const runMock = jest.spyOn(main, 'run')
 
 // Mock the action's runScript function
-//const runScriptMock = jest.spyOn(main, 'runScript').mockImplementation()
+// const runScriptMock = jest.spyOn(main, 'runScript').mockImplementation()
 
 describe('action', () => {
   beforeEach(() => {

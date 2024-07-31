@@ -1,6 +1,6 @@
 const core = require('@actions/core')
 const path = require('node:path')
-const { exec } = require('node:child_process')
+// const { exec } = require('node:child_process')
 const os = require('node:os')
 const util = require('node:util')
 const execAsync = util.promisify(require('node:child_process').exec)
@@ -77,8 +77,8 @@ const run = async () => {
 
     try {
       const { stdout, stderr } = await execAsync(command, shell)
-      console.log(`stderr: ${stderr}`)
-      console.log(`stdout: ${stdout}`)
+      console.log(`stderr: ${stderr} ---`)
+      console.log(`stdout: ${stdout} ---`)
     } catch (error) {
       core.setFailed(error)
     }

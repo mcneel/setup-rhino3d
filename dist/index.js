@@ -24921,7 +24921,7 @@ exports["default"] = _default;
 
 const core = __nccwpck_require__(2186)
 const path = __nccwpck_require__(9411)
-const { exec } = __nccwpck_require__(7718)
+// const { exec } = require('node:child_process')
 const os = __nccwpck_require__(612)
 const util = __nccwpck_require__(7261)
 const execAsync = util.promisify((__nccwpck_require__(7718).exec))
@@ -24998,8 +24998,8 @@ const run = async () => {
 
     try {
       const { stdout, stderr } = await execAsync(command, shell)
-      console.log(`stderr: ${stderr}`)
-      console.log(`stdout: ${stdout}`)
+      console.log(`stderr: ${stderr} ---`)
+      console.log(`stdout: ${stdout} ---`)
     } catch (error) {
       core.setFailed(error)
     }
