@@ -57,4 +57,4 @@ jobs:
         id: test-action
         uses: ./
         with:
-          email-address: ${secret.EMAIL_ADDRESS}
+          email-address: ${{ secrets.EMAIL_ADDRESS }}
