@@ -16,7 +16,7 @@ const platformMock = jest.spyOn(os, 'platform').mockImplementation()
 const runMock = jest.spyOn(main, 'run')
 
 // Mock the action's runScript function
-const runScriptMock = jest.spyOn(main, 'runScript')
+//const runScriptMock = jest.spyOn(main, 'runScript').mockImplementation()
 
 describe('action', () => {
   beforeEach(() => {
@@ -57,12 +57,6 @@ describe('action', () => {
     await main.run()
     expect(runMock).toHaveReturned()
     expect(debugMock).toHaveBeenCalledWith('Script name is setup-rhino.ps1')
-  })
-
-  it('runScript returns', async () => {
-    runScriptMock.mockImplementation('', '')
-    await main.runScript()
-    expect(runScriptMock).toHaveReturned()
   })
 
   // TODO: Add tests related to validating email address

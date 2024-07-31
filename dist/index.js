@@ -24923,6 +24923,8 @@ const core = __nccwpck_require__(2186)
 const path = __nccwpck_require__(9411)
 const { exec } = __nccwpck_require__(7718)
 const os = __nccwpck_require__(612)
+const util = __nccwpck_require__(7261)
+const execAsync = util.promisify((__nccwpck_require__(7718).exec))
 
 /**
  * The main function for the action.
@@ -24977,10 +24979,11 @@ const run = async () => {
 
     core.debug(`command: ${command}`)
 
-    const res = await runScript(command, shell)
+    // const res = await runScript(command, shell)
 
-    core.debug(res)
+    // core.debug(res)
 
+    /*
     if (
       Object.prototype.hasOwnProperty.call(res, 'message') &&
       (Object.prototype.hasOwnProperty.call(res.message, 'err') ||
@@ -24991,6 +24994,15 @@ const run = async () => {
       console.log(res.stdout)
     }
 
+  */
+
+    const { stdout, stderr } = await execAsync(command, shell)
+    if (stderr !== '' || stderr !== null) {
+      core.setFailed(stderr)
+    }
+
+    console.log(stdout)
+
     core.debug(new Date().toTimeString())
   } catch (error) {
     // Fail the workflow run if an error occurs
@@ -24998,8 +25010,15 @@ const run = async () => {
   }
 }
 
+/*
 const runScript = async (command, shell) => {
   return new Promise((resolve, reject) => {
+    if( !command ) {
+      reject(new Error('command argument is empty, null, or undefined'))
+    }
+    if( !shell ) {
+      reject(new Error('shell argument is empty, null, or undefined'))
+    }
     exec(command, shell, (err, stdout, stderr) => {
       if (err || stderr) {
         reject(new Error({ err, stderr }))
@@ -25009,10 +25028,9 @@ const runScript = async (command, shell) => {
     })
   })
 }
-
+*/
 module.exports = {
-  run,
-  runScript
+  run
 }
 
 
