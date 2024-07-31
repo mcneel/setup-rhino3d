@@ -24956,7 +24956,7 @@ async function run() {
     switch (os.platform()) {
       case 'win32':
         scriptName += '.ps1'
-        commandArgs = ' -EmailAddress ' + emailAddress
+        commandArgs = ` -EmailAddress ${emailAddress}`
         shell = { shell: 'powershell.exe' }
         core.debug(`Script name is ${scriptName}`)
         break
@@ -24981,7 +24981,10 @@ async function run() {
     core.debug(` command: ${command}`)
 
     const res = await runScript(command, shell)
-    if (res.hasOwnProperty('err') || res.hasOwnProperty('stderr')) {
+    if (
+      Object.prototype.hasOwnProperty.call(res.message, 'err') ||
+      Object.prototype.hasOwnProperty.call(res.message, 'stderr')
+    ) {
       core.setFailed(res)
     } else {
       console.log(res.stdout)
@@ -24998,7 +25001,7 @@ const runScript = async (command, shell) => {
   return new Promise((resolve, reject) => {
     exec(command, shell, (err, stdout, stderr) => {
       if (err || stderr) {
-        reject({ err, stderr })
+        reject(new Error({ err, stderr }))
       } else {
         resolve({ stdout })
       }

@@ -26,7 +26,7 @@
   "scripts": {
     "bundle": "npm run format:write && npm run package",
     "ci-test": "npx jest",
-    "coverage": "npx make-coverage-badge --output-path ./badges/coverage.svg",
+    "coverage": "npx make-coverage-badge --report-path ./coverage/coverage-summary.json --output-path ./badges/coverage.svg",
     "format:write": "npx prettier --write .",
     "format:check": "npx prettier --check .",
     "lint": "npx eslint . -c ./.github/linters/.eslintrc.yml",
