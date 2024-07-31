@@ -14,7 +14,7 @@ const platformMock = jest.spyOn(os, 'platform').mockImplementation()
 
 // Mock the action's main functions
 const runMock = jest.spyOn(main, 'run')
-const execMock = jest.spyOn(main , 'execAsync')
+const execMock = jest.spyOn(main, 'execAsync')
 
 describe('action', () => {
   beforeEach(() => {
@@ -58,12 +58,10 @@ describe('action', () => {
   })
 
   it('execAsync is called', async () => {
-
-    execMock.mockImplementation('','')
+    execMock.mockImplementation('', '')
     await main.execAsync()
     expect(execMock).toHaveBeenCalledTimes(1)
     expect(execMock).toHaveReturned()
-
   })
 
   // TODO: Add tests related to validating email address
