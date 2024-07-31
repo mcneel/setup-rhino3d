@@ -65,5 +65,5 @@ describe('action', () => {
     expect(runScriptMock).toHaveReturned()
   })
 
-  //TODO: Add tests related to validating email address
+  // TODO: Add tests related to validating email address
 })
