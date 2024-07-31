@@ -1,22 +1,30 @@
 # setup-rhino3d
 
-Github Action to install Rhino3d
+This action supports automating the download and installation of the latest published Rhino3d service release onto Windows runners. The objective is to facilitate the setup of Rhino for automated workflows such as CI and automated testing.
 
-This action supports installing the latest published service release of Rhino 3d on Windows runners.
+## What this action does:
+- Downloads the latest Rhino for Windows (8 at the time of writing) service release installer.
+- Installs the downloaded Rhino installer.
+
+## What this action does not do:
+- This action does not do anything related to licensing Rhino, either with a Core-Hour Billing Token or Rhino Account.
+- This action does not do anything related to automatically running Rhino.
+- This action does not do anything related to automated testing.
+- This action does not allow you to specify a Rhino version.
 
 ## Example usage
 
 ```yaml
-env:
-  RHINO_TOKEN: ${{ secrets.RHINO_TOKEN }}
+# ...
 
 jobs:
   build:
     - name: Install Rhino
       uses: mcneel/setup-rhino3d@v1.0.0
-      id: setup_rhino
       with:
         email-address: ${{ secrets.EMAIL_ADDRESS }}
+
+# ...
 ```
 
 ## Inputs
@@ -25,7 +33,9 @@ jobs:
 
 **Required** The email of the associated user.
 
-Note: it is recommended that you save this email address as a repository secret. FFor more information
+> [!NOTE]
+>
+> It is recommended that you save this email address as a repository secret. For more information
 on setting up repository secrets, see [this article](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions?tool=webui#creating-secrets-for-a-repository).
 
 ### A note about the Rhino Token
@@ -36,6 +46,46 @@ for instructions on setting up core-hour billing.
 
 This Rhino Token should be stored as a repository secret. For more information
 on setting up repository secrets, see [this article](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions?tool=webui#creating-secrets-for-a-repository).
+
+```yaml
+# ...
+
+env:
+  RHINO_TOKEN: ${{ secrets.RHINO_TOKEN }}
+
+jobs:
+  build:
+    - name: Install Rhino
+      uses: mcneel/setup-rhino3d@v1.0.0
+      with:
+        email-address: ${{ secrets.EMAIL_ADDRESS }}
+
+# ...
+```
+
+## Related Projects
+
+### SimpleRhinoTests
+
+Demonstration of using setup-rhino3d in an automated testing scenario. Uses the Rhino.Testing nuget package (see below) to start Rhino and run tests.
+
+- [repository](https://github.com/mcneel/SimpleRhinoTests)
+- [workflow](https://github.com/mcneel/SimpleRhinoTests/actions/runs/10159446794/workflow#L25)
+- [successful run of the setup-rhino3d action](https://github.com/mcneel/SimpleRhinoTests/actions/runs/10159446794/job/28093702909#step:4:1)
+
+```
+Run mcneel/setup-rhino3d@v1.0.0
+Downloading and installing the latest Rhino 3d...
+
+===>  Successfully installed Rhino 8.9.24194.18121
+```
+
+### Rhino.Testing
+
+NUnit dotnet unit testing for Rhino3D.
+
+- [repository](https://github.com/mcneel/Rhino.Testing)
+- [nuget package](https://www.nuget.org/packages/Rhino.Testing/)
 
 ## Development
 
@@ -63,9 +113,10 @@ need to perform some initial setup steps before you can develop your action.
    npm run bundle
    ```
 
-NOTE: At the time of writing, this will not copy script/setup-rhino.ps1 to
-dist/setup-rhino.ps1. If you change this script, you should move over the
-changes manually
+> [!NOTE]
+>
+> At the time of writing, this will not copy `script/setup-rhino.ps1` to `dist/setup-rhino.ps1`. 
+> If you change this script, you should move over the changes manually
 
 3. ✅ Run the tests
 
@@ -73,11 +124,14 @@ changes manually
    $ npm test
 
    PASS  ./index.test.js
-     ✓ throws invalid number (3ms)
-     ✓ wait 500 ms (504ms)
-     ✓ test runs (95ms)
+    ✓ calls run when imported (9 ms)
 
-   ...
+   PASS  ./main.test.js
+     ✓ sets the input values (84 ms)
+     ✓ fails on Linux (17 ms)
+     ✓ fails on macOS (22 ms)
+     ✓ output script name on Windows (4 ms)
+     ✓ runScript returns
    ```
 
 ### Committing Changes and tags
