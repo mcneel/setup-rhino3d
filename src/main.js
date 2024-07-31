@@ -54,15 +54,16 @@ const run = async () => {
     command = core.toPlatformPath(command)
     command += commandArgs
 
-    core.debug(` command: ${command}`)
+    core.debug(`command: ${command}`)
 
     const res = await runScript(command, shell)
 
     core.debug(res)
 
     if (
-      Object.prototype.hasOwnProperty.call(res.message, 'err') ||
-      Object.prototype.hasOwnProperty.call(res.message, 'stderr')
+      Object.prototype.hasOwnProperty.call(res, 'message') &&
+      (Object.prototype.hasOwnProperty.call(res.message, 'err') ||
+        Object.prototype.hasOwnProperty.call(res.message, 'stderr'))
     ) {
       core.setFailed(res)
     } else {
