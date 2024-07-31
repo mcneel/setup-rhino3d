@@ -1,13 +1,4 @@
-# In JavaScript actions, `dist/` is a special directory. When you reference
-# an action with the `uses:` property, `dist/index.js` is the code that will be
-# run. For this project, the `dist/index.js` file is transpiled from other
-# source files. This workflow ensures the `dist/` directory contains the
-# expected transpiled code.
-#
-# If this workflow is run from a feature branch, it will act as an additional CI
-# check and fail if the checked-in `dist/` directory does not match what is
-# expected from the build.
-name: Check Transpiled JavaScript
+name: Continuous Integration
 
 on:
   pull_request:
@@ -21,8 +12,8 @@ permissions:
   contents: read
 
 jobs:
-  check-dist:
-    name: Check dist/
+  test-javascript:
+    name: JavaScript Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -38,35 +29,36 @@ jobs:
           cache: npm
 
       - name: Install Dependencies
-        id: install
+        id: npm-ci
         run: npm ci
 
-      - name: Build dist/ Directory
-        id: build
-        run: npm run bundle
+      - name: Check Format
+        id: npm-format-check
+        run: npm run format:check
 
-      # This will fail the workflow if the `dist/` directory is different than
-      # expected.
-      - name: Compare Directories
-        id: diff
-        run: |
-          if [ ! -d dist/ ]; then
-            echo "Expected dist/ directory does not exist.  See status below:"
-            ls -la ./
-            exit 1
-          fi
-          if [ "$(git diff --ignore-space-at-eol --text dist/ | wc -l)" -gt "0" ]; then
-            echo "Detected uncommitted changes after build. See status below:"
-            git diff --ignore-space-at-eol --text dist/
-            exit 1
-          fi
+      - name: Lint
+        id: npm-lint
+        run: npm run lint
 
-      # If `dist/` was different than expected, upload the expected version as a
-      # workflow artifact.
-      - if: ${{ failure() && steps.diff.outcome == 'failure' }}
-        name: Upload Artifact
-        id: upload
-        uses: actions/upload-artifact@v4
+      - name: Test
+        id: npm-ci-test
+        run: npm run ci-test
+
+  test-action:
+    name: GitHub Actions Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Test Local Action
+        id: test-action
+        uses: ./
         with:
-          name: dist
-          path: dist/
+          milliseconds: 1000
+
+      - name: Print Output
+        id: output
+        run: echo "${{ steps.test-action.outputs.time }}"
