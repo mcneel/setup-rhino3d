@@ -126,11 +126,11 @@ need to perform some initial setup steps before you can develop your action.
    npm run bundle
    ```
 
-> [!NOTE]
->
-> At the time of writing, this will not copy `script/setup-rhino.ps1` to
-> `dist/setup-rhino.ps1`. If you change this script, you should move over the
-> changes manually
+    > [!NOTE]
+    >
+    > At the time of writing, this will not copy `script/setup-rhino.ps1` to
+    > `dist/setup-rhino.ps1`. If you change this script, you should move over the
+    > changes manually
 
 3. ✅ Run the tests
 
