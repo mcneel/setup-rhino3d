@@ -57,6 +57,9 @@ const run = async () => {
     core.debug(` command: ${command}`)
 
     const res = await runScript(command, shell)
+
+    core.debug(res)
+
     if (
       Object.prototype.hasOwnProperty.call(res.message, 'err') ||
       Object.prototype.hasOwnProperty.call(res.message, 'stderr')
