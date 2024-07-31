@@ -77,8 +77,10 @@ const run = async () => {
 
     try {
       const { stdout, stderr } = await execAsync(command, shell)
-      console.log(`stderr: ${stderr} ---`)
-      console.log(`stdout: ${stdout} ---`)
+      console.log(`stderr: ${stderr.trim()}`)
+      console.log(`stderr length: ${stderr.length}`)
+      console.log(`stdout: ${stdout.trim()}`)
+      console.log(`stdout length: ${stdout.length}`)
     } catch (error) {
       core.setFailed(error)
     }
