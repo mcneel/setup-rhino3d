@@ -24996,12 +24996,13 @@ const run = async () => {
 
   */
 
-    const { stdout, stderr } = await execAsync(command, shell)
-    if (stderr !== '' || stderr !== null) {
-      core.setFailed(stderr)
+    try {
+      const { stdout, stderr } = await execAsync(command, shell)
+      console.log(`stderr: ${stderr}`)
+      console.log(`stdout: ${stdout}`)
+    } catch (error) {
+      core.setFailed(error)
     }
-
-    console.log(stdout)
 
     core.debug(new Date().toTimeString())
   } catch (error) {
