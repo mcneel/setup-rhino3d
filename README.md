@@ -1,6 +1,6 @@
 # setup-rhino3d
 
-![Linter](https://github.com/mcneel/etup-rhino3d/actions/workflows/linter.yml/badge.svg)
+![Linter](https://github.com/mcneel/setup-rhino3d/actions/workflows/linter.yml/badge.svg)
 ![CI](https://github.com/mcneel/setup-rhino3d/actions/workflows/ci.yml/badge.svg)
 ![Coverage](./badges/coverage.svg)
 
