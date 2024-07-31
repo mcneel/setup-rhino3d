@@ -24920,11 +24920,8 @@ exports["default"] = _default;
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const core = __nccwpck_require__(2186)
-//import {core, platform} from '@actions/core'
 const path = __nccwpck_require__(9411)
-//import {path} from 'path'
 const { exec } = __nccwpck_require__(7718)
-//import {exec} from 'child_process'
 const os = __nccwpck_require__(612)
 
 /**
@@ -24937,7 +24934,7 @@ async function run() {
 
     // Get the inputs from the workflow file
     const emailAddress = core.getInput('email-address', { required: true })
-    //const rhinoVersion = core.getInput('rhino-version', { required: false })
+    // const rhinoVersion = core.getInput('rhino-version', { required: false })
 
     /*
     let command = path.join(
@@ -24961,13 +24958,13 @@ async function run() {
         core.debug(`Script name is ${scriptName}`)
         break
       case 'darwin':
-        //scriptName += '.sh'
-        //shell = { shell: '/bin/sh' }
+        // scriptName += '.sh'
+        // shell = { shell: '/bin/sh' }
         core.setFailed('macOS is not supported')
         break
       case 'linux':
-        //scriptName += '.sh'
-        //shell = { shell: '/bin/sh' }
+        // scriptName += '.sh'
+        // shell = { shell: '/bin/sh' }
         core.setFailed('Linux is not supported')
         break
       default:

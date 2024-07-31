@@ -1,9 +1,6 @@
 const core = require('@actions/core')
-//import {core, platform} from '@actions/core'
 const path = require('node:path')
-//import {path} from 'path'
 const { exec } = require('node:child_process')
-//import {exec} from 'child_process'
 const os = require('node:os')
 
 /**
@@ -16,7 +13,7 @@ async function run() {
 
     // Get the inputs from the workflow file
     const emailAddress = core.getInput('email-address', { required: true })
-    //const rhinoVersion = core.getInput('rhino-version', { required: false })
+    // const rhinoVersion = core.getInput('rhino-version', { required: false })
 
     /*
     let command = path.join(
@@ -40,13 +37,13 @@ async function run() {
         core.debug(`Script name is ${scriptName}`)
         break
       case 'darwin':
-        //scriptName += '.sh'
-        //shell = { shell: '/bin/sh' }
+        // scriptName += '.sh'
+        // shell = { shell: '/bin/sh' }
         core.setFailed('macOS is not supported')
         break
       case 'linux':
-        //scriptName += '.sh'
-        //shell = { shell: '/bin/sh' }
+        // scriptName += '.sh'
+        // shell = { shell: '/bin/sh' }
         core.setFailed('Linux is not supported')
         break
       default:

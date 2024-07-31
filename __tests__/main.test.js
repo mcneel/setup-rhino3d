@@ -9,7 +9,7 @@ const os = require('node:os')
 const debugMock = jest.spyOn(core, 'debug').mockImplementation()
 const getInputMock = jest.spyOn(core, 'getInput').mockImplementation()
 const setFailedMock = jest.spyOn(core, 'setFailed').mockImplementation()
-const setOutputMock = jest.spyOn(core, 'setOutput').mockImplementation()
+// const setOutputMock = jest.spyOn(core, 'setOutput').mockImplementation()
 const platformMock = jest.spyOn(os, 'platform').mockImplementation()
 
 // Mock the action's main function

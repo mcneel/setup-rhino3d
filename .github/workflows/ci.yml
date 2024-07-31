@@ -58,7 +58,3 @@ jobs:
         uses: ./
         with:
           email-address: ${secret.EMAIL_ADDRESS}
-
-      - name: Print Output
-        id: output
-        run: echo "${{ steps.test-action.outputs.time }}"

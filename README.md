@@ -9,13 +9,13 @@ published Rhino3d service release onto Windows runners. The objective is to
 facilitate the setup of Rhino for automated workflows such as CI and automated
 testing.
 
-## What this action does:
+## What this action does
 
 - Downloads the latest Rhino for Windows (8 at the time of writing) service
   release installer.
 - Installs the downloaded Rhino installer.
 
-## What this action does not do:
+## What this action does not do
 
 - This action does not do anything related to licensing Rhino, either with a
   Core-Hour Billing Token or Rhino Account.
@@ -86,7 +86,7 @@ Rhino.Testing nuget package (see below) to start Rhino and run tests.
 - [workflow](https://github.com/mcneel/SimpleRhinoTests/actions/runs/10159446794/workflow#L25)
 - [successful run of the setup-rhino3d action](https://github.com/mcneel/SimpleRhinoTests/actions/runs/10159446794/job/28093702909#step:4:1)
 
-```
+```bash
 Run mcneel/setup-rhino3d@v1.0.0
 Downloading and installing the latest Rhino 3d...
 
