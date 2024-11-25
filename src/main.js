@@ -23,10 +23,10 @@ const run = async () => {
         url += `8/latest/rc/direct/?email=${emailAddress}`
         break
       case 'wip':
-        url += `9/wip/direct/?email==${emailAddress}`
+        url += `9/wip/direct/?email=${emailAddress}`
         break
       default:
-        url += `8/latest/direct/?email==${emailAddress}`
+        url += `8/latest/direct/?email=${emailAddress}`
     }
 
     /*
