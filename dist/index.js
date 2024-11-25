@@ -24988,7 +24988,7 @@ const run = async () => {
       core.setFailed(error)
     }
 
-    // check if Rhino has been installed
+    // check if Rhino has been installed. Specific to win32
 
     const registryPath = `HKLM:\\SOFTWARE\\McNeel\\Rhinoceros\\${version}.0\\Install`
     command = `$installedVersion = [Version] (get-itemproperty -Path ${registryPath} -name "version").Version ; Write-Output "Successfully installed Rhino $installedVersion"`

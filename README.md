@@ -31,7 +31,7 @@ testing.
 jobs:
   build:
     - name: Install Rhino
-      uses: mcneel/setup-rhino3d@v1.1.0
+      uses: mcneel/setup-rhino3d@v2
       with:
         email-address: ${{ secrets.EMAIL_ADDRESS }}
         release-version: rc # see below for values
@@ -80,7 +80,7 @@ env:
 jobs:
   build:
     - name: Install Rhino
-      uses: mcneel/setup-rhino3d@v1.1.0
+      uses: mcneel/setup-rhino3d@v2
       with:
         email-address: ${{ secrets.EMAIL_ADDRESS }}
 # ...
@@ -98,7 +98,7 @@ Rhino.Testing nuget package (see below) to start Rhino and run tests.
 - [successful run of the setup-rhino3d action](https://github.com/mcneel/SimpleRhinoTests/actions/runs/10159446794/job/28093702909#step:4:1)
 
 ```bash
-Run mcneel/setup-rhino3d@v1.1.0
+Run mcneel/setup-rhino3d@v2
 Downloading and installing the latest Rhino 3d...
 
 ===>  Successfully installed Rhino 8.9.24194.18121
@@ -162,9 +162,7 @@ need to perform some initial setup steps before you can develop your action.
 ### Committing Changes and tags
 
 If you have modified any of the js code, do not forget to run `npm run bundle`
-prior to committing changes. Also, if you have modified the
-`script/setup-rhino.ps1`, please manually copy the changes to
-`dist/setup-rhino.ps1`.
+prior to committing changes.
 
 Users expect to consume this action via a version number associated with a tag.
 Do not forget to add a tag to any commit you wish to use or have users be able
