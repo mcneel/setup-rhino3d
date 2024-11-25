@@ -70,7 +70,7 @@ const run = async () => {
     // check if Rhino has been installed
 
     const registryPath = `HKLM:\\SOFTWARE\\McNeel\\Rhinoceros\\${version}.0\\Install`
-    command = `Write-Step "Successfully installed Rhino $([Version] (get-itemproperty -Path ${registryPath} -name "version").Version)"`
+    command = `$installedVersion = [Version] (get-itemproperty -Path ${registryPath} -name "version").Version ; Write-Output "Successfully installed Rhino $installedVersion"`
 
     try {
       const { stdout, stderr } = await execAsync(command, shell)
