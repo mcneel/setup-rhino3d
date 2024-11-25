@@ -1,9 +1,10 @@
 const core = require('@actions/core')
-const path = require('node:path')
-// const { exec } = require('node:child_process')
 const os = require('node:os')
 const util = require('node:util')
+
 const execAsync = util.promisify(require('node:child_process').exec)
+
+const download = require('./utilities').download
 
 /**
  * The main function for the action.
@@ -11,10 +12,18 @@ const execAsync = util.promisify(require('node:child_process').exec)
  */
 const run = async () => {
   try {
+    switch (os.platform()) {
+      case 'win32':
+        break
+      default:
+        core.setFailed('Unsupported platform')
+    }
+
     // Get the inputs from the workflow file
     const emailAddress = core.getInput('email-address', { required: true })
     const releaseVersion = core.getInput('release-version', { required: false }) // rc, wip, latest
 
+    // build URL
     let url = 'https://www.rhino3d.com/download/rhino/'
     let version = '8'
     switch (releaseVersion) {
@@ -34,49 +43,20 @@ const run = async () => {
         console.log('Downloading and installing the latest Rhino 3d...')
     }
 
-    /*
-    let command = path.join(
-      path.dirname(__dirname),
-      'script',
-      'setup-rhino.ps1'
-    )
-    command = core.toWin32Path(command)
-    command += ' -EmailAddress ' + emailAddress //+ ' -RhinoToken ' + rhinoToken
-    */
+    process.chdir('c:\\temp')
 
-    let scriptName = 'setup-rhino'
-    let commandArgs = ''
-    let shell = null
+    // download file
+    const rhinoExe = 'c:\\temp\\rhino_setup.exe'
+    await download(url, rhinoExe)
 
-    switch (os.platform()) {
-      case 'win32':
-        scriptName += '.ps1'
-        commandArgs = ` -URL ${url} -VERSION ${version}`
-        shell = { shell: 'powershell.exe' }
-        core.debug(`Script name is ${scriptName}`)
-        break
-      case 'darwin':
-        // scriptName += '.sh'
-        // shell = { shell: '/bin/sh' }
-        core.setFailed('macOS is not supported')
-        break
-      case 'linux':
-        // scriptName += '.sh'
-        // shell = { shell: '/bin/sh' }
-        core.setFailed('Linux is not supported')
-        break
-      default:
-        core.setFailed('Unsupported platform')
-    }
+    // install Rhino
 
-    let command = path.join(__dirname, scriptName)
-    command = core.toPlatformPath(command)
-    command += commandArgs
-
-    core.debug(`command: ${command}`)
+    let command = `Start-Process -FilePath ${rhinoExe} -ArgumentList '-passive', '-norestart' -Wait`
+    const shell = { shell: 'powershell.exe' }
 
     try {
       const { stdout, stderr } = await execAsync(command, shell)
+
       if (stderr.trim().length > 0) {
         core.setFailed(stderr)
       }
@@ -85,7 +65,21 @@ const run = async () => {
       core.setFailed(error)
     }
 
-    core.debug(new Date().toTimeString())
+    // check if Rhino has been installed. Specific to win32
+
+    const registryPath = `HKLM:\\SOFTWARE\\McNeel\\Rhinoceros\\${version}.0\\Install`
+    command = `$installedVersion = [Version] (get-itemproperty -Path ${registryPath} -name "version").Version ; Write-Output "Successfully installed Rhino $installedVersion"`
+
+    try {
+      const { stdout, stderr } = await execAsync(command, shell)
+
+      if (stderr.trim().length > 0) {
+        core.setFailed(stderr)
+      }
+      console.log(stdout.trim())
+    } catch (error) {
+      core.setFailed(error)
+    }
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message)

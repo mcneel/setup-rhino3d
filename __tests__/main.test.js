@@ -6,7 +6,7 @@ const main = require('../src/main')
 const os = require('node:os')
 
 // Mock the GitHub Actions core library
-const debugMock = jest.spyOn(core, 'debug').mockImplementation()
+// const debugMock = jest.spyOn(core, 'debug').mockImplementation()
 const getInputMock = jest.spyOn(core, 'getInput').mockImplementation()
 const setFailedMock = jest.spyOn(core, 'setFailed').mockImplementation()
 // const setOutputMock = jest.spyOn(core, 'setOutput').mockImplementation()
@@ -34,28 +34,21 @@ describe('action', () => {
 
     await main.run()
     expect(runMock).toHaveReturned()
-  })
+  }, 180000)
 
   test('fails on Linux', async () => {
     platformMock.mockImplementation(() => 'linux')
     await main.run()
     expect(runMock).toHaveReturned()
-    expect(setFailedMock).toHaveBeenCalledWith('Linux is not supported')
-  })
+    expect(setFailedMock).toHaveBeenCalledWith('Unsupported platform')
+  }, 180000)
 
   test('fails on macOS', async () => {
     platformMock.mockImplementation(() => 'darwin')
     await main.run()
     expect(runMock).toHaveReturned()
-    expect(setFailedMock).toHaveBeenCalledWith('macOS is not supported')
-  })
-
-  test('output script name on Windows', async () => {
-    platformMock.mockImplementation(() => 'win32')
-    await main.run()
-    expect(runMock).toHaveReturned()
-    expect(debugMock).toHaveBeenCalledWith('Script name is setup-rhino.ps1')
-  })
+    expect(setFailedMock).toHaveBeenCalledWith('Unsupported platform')
+  }, 180000)
 
   test('execAsync is called', async () => {
     execMock.mockImplementation('', '')
