@@ -24932,22 +24932,27 @@ const execAsync = util.promisify((__nccwpck_require__(7718).exec))
  */
 const run = async () => {
   try {
-    console.log('Downloading and installing the latest Rhino 3d...')
-
     // Get the inputs from the workflow file
     const emailAddress = core.getInput('email-address', { required: true })
     const releaseVersion = core.getInput('release-version', { required: false }) // rc, wip, latest
 
     let url = 'https://www.rhino3d.com/download/rhino/'
+    let version = '8'
     switch (releaseVersion) {
       case 'rc':
         url += `8/latest/rc/direct/?email=${emailAddress}`
+        console.log(
+          'Downloading and installing the latest Rhino 3d Release Candidate...'
+        )
         break
       case 'wip':
         url += `9/wip/direct/?email=${emailAddress}`
+        console.log('Downloading and installing the Rhino 3d WIP...')
+        version = '9'
         break
       default:
         url += `8/latest/direct/?email=${emailAddress}`
+        console.log('Downloading and installing the latest Rhino 3d...')
     }
 
     /*
@@ -24967,7 +24972,7 @@ const run = async () => {
     switch (os.platform()) {
       case 'win32':
         scriptName += '.ps1'
-        commandArgs = ` -URL ${url}`
+        commandArgs = ` -URL ${url} -VERSION ${version}`
         shell = { shell: 'powershell.exe' }
         core.debug(`Script name is ${scriptName}`)
         break

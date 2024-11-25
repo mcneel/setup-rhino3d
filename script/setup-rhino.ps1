@@ -3,6 +3,7 @@
 
 param (
     [Parameter(Mandatory=$true)][string] $URL,
+    [Parameter(Mandatory=$true)][string] $VERSION,
     #[Parameter(Mandatory=$true)][string] $RhinoToken,
     [switch] $install = $false
 )
@@ -40,10 +41,11 @@ function SetEnvVar {
 #Write-Step 'Download latest Rhino 8'
 $rhinoDownloadUrl = "$URL" 
 $rhinoSetup = "c:\temp\rhino_setup.exe"
+$rhinoVersion = "$VERSION"
 Download $rhinoDownloadUrl $rhinoSetup
 
 # Set firewall rule to allow installation, but suppress output
-[void](New-NetFirewallRule -DisplayName "Rhino 8 Installer" -Direction Inbound -Program $rhinoSetup -Action Allow)
+[void](New-NetFirewallRule -DisplayName "Rhino $rhinoVersion Installer" -Direction Inbound -Program $rhinoSetup -Action Allow)
 
 #Write-Step 'Installing Rhino'
 # Automated install (https://wiki.mcneel.com/rhino/installingrhino/8)
@@ -51,5 +53,5 @@ Start-Process -FilePath $rhinoSetup -ArgumentList '-passive', '-norestart' -Wait
 # delete installer
 Remove-Item $rhinoSetup
 # Print installed version number
-$installedVersion = [Version] (get-itemproperty -Path HKLM:\SOFTWARE\McNeel\Rhinoceros\8.0\Install -name "version").Version
+$installedVersion = [Version] (get-itemproperty -Path "HKLM:\SOFTWARE\McNeel\Rhinoceros\$rhinoVersion.0\Install" -name "version").Version
 Write-Step "Successfully installed Rhino $installedVersion"
