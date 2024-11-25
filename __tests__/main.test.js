@@ -14,14 +14,14 @@ const platformMock = jest.spyOn(os, 'platform').mockImplementation()
 
 // Mock the action's main functions
 const runMock = jest.spyOn(main, 'run')
-const execMock = jest.spyOn(main, 'execAsync')
+const execMock = jest.spyOn(main , 'execAsync')
 
 describe('action', () => {
   beforeEach(() => {
     jest.clearAllMocks()
   })
 
-  it('sets the input values', async () => {
+  test('sets the input values', async () => {
     // Set the action's inputs as return values from core.getInput()
     getInputMock.mockImplementation(name => {
       switch (name) {
@@ -36,32 +36,34 @@ describe('action', () => {
     expect(runMock).toHaveReturned()
   })
 
-  it('fails on Linux', async () => {
+  test('fails on Linux', async () => {
     platformMock.mockImplementation(() => 'linux')
     await main.run()
     expect(runMock).toHaveReturned()
     expect(setFailedMock).toHaveBeenCalledWith('Linux is not supported')
   })
 
-  it('fails on macOS', async () => {
+  test('fails on macOS', async () => {
     platformMock.mockImplementation(() => 'darwin')
     await main.run()
     expect(runMock).toHaveReturned()
     expect(setFailedMock).toHaveBeenCalledWith('macOS is not supported')
   })
 
-  it('output script name on Windows', async () => {
+  test('output script name on Windows', async () => {
     platformMock.mockImplementation(() => 'win32')
     await main.run()
     expect(runMock).toHaveReturned()
     expect(debugMock).toHaveBeenCalledWith('Script name is setup-rhino.ps1')
   })
 
-  it('execAsync is called', async () => {
-    execMock.mockImplementation('', '')
+  test('execAsync is called', async () => {
+
+    execMock.mockImplementation('','')
     await main.execAsync()
     expect(execMock).toHaveBeenCalledTimes(1)
     expect(execMock).toHaveReturned()
+
   })
 
   // TODO: Add tests related to validating email address
