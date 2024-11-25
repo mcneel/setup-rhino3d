@@ -78,7 +78,7 @@ env:
 jobs:
   build:
     - name: Install Rhino
-      uses: mcneel/setup-rhino3d@v1.0.0
+      uses: mcneel/setup-rhino3d@v1.1.0
       with:
         email-address: ${{ secrets.EMAIL_ADDRESS }}
 # ...
