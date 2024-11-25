@@ -24966,9 +24966,11 @@ const run = async () => {
         console.log('Downloading and installing the latest Rhino 3d...')
     }
 
+    process.chdir('c:\\temp')
+
     // download file
-    const rhinoExe = __nccwpck_require__.ab + "c://temp//rhino_setup.exe"
-    await download(url, __nccwpck_require__.ab + "c://temp//rhino_setup.exe")
+    const rhinoExe = 'c:\\temp\\rhino_setup.exe'
+    await download(url, rhinoExe)
 
     // install Rhino
 
