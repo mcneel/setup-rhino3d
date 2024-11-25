@@ -34,7 +34,7 @@ jobs:
       uses: mcneel/setup-rhino3d@v1.1.0
       with:
         email-address: ${{ secrets.EMAIL_ADDRESS }}
-        release-version: rc # rc for release candidate, wip for 9, latest for latest 8.x. Leave blank for latest
+        release-version: rc # see below for values
 # ...
 ```
 

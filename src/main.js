@@ -17,20 +17,16 @@ const run = async () => {
     const emailAddress = core.getInput('email-address', { required: true })
     const releaseVersion = core.getInput('release-version', { required: false }) // rc, wip, latest
 
-    //https://www.rhino3d.com/download/rhino/8/latest/rc/direct/?email=your_email
-    //https://www.rhino3d.com/download/rhino/8/latest/direct/?email=your_email
-    //https://www.rhino3d.com/download/rhino/9/wip/direct/?email=your_email
-
     let url = 'https://www.rhino3d.com/download/rhino/'
     switch (releaseVersion) {
       case 'rc':
-        url += '8/latest/rc/direct/?email=${emailAddress}'
+        url += `8/latest/rc/direct/?email=${emailAddress}`
         break
       case 'wip':
-        url += '9/wip/direct/?email==${emailAddress}'
+        url += `9/wip/direct/?email==${emailAddress}`
         break
       default:
-        url += '8/latest/direct/?email==${emailAddress}'
+        url += `8/latest/direct/?email==${emailAddress}`
     }
 
     /*
