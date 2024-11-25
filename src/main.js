@@ -1,6 +1,4 @@
 const core = require('@actions/core')
-const path = require('node:path')
-// const { exec } = require('node:child_process')
 const os = require('node:os')
 const util = require('node:util')
 

@@ -24920,8 +24920,6 @@ exports["default"] = _default;
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const core = __nccwpck_require__(2186)
-const path = __nccwpck_require__(9411)
-// const { exec } = require('node:child_process')
 const os = __nccwpck_require__(612)
 const util = __nccwpck_require__(7261)
 
@@ -25026,7 +25024,7 @@ const { finished } = __nccwpck_require__(6402)
 
 // from https://stackoverflow.com/a/74722818
 
-async function download(url, file) {
+async function download (url, file) {
   const stream = fs.createWriteStream(file)
   const { body } = await fetch(url)
   await finished(Readable.fromWeb(body).pipe(stream))
@@ -25162,14 +25160,6 @@ module.exports = require("node:fs");
 
 "use strict";
 module.exports = require("node:os");
-
-/***/ }),
-
-/***/ 9411:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("node:path");
 
 /***/ }),
 
