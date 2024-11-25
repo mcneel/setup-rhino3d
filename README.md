@@ -31,9 +31,10 @@ testing.
 jobs:
   build:
     - name: Install Rhino
-      uses: mcneel/setup-rhino3d@v1.0.0
+      uses: mcneel/setup-rhino3d@v1.1.0
       with:
         email-address: ${{ secrets.EMAIL_ADDRESS }}
+        release-version: rc # rc for release candidate, wip for 9, latest for latest 8.x. Leave blank for latest
 # ...
 ```
 
@@ -48,6 +49,14 @@ jobs:
 > It is recommended that you save this email address as a repository secret. For
 > more information on setting up repository secrets, see
 > [this article](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions?tool=webui#creating-secrets-for-a-repository).
+
+### release-version
+
+**Optional** The release version you wish to use. Values include:
+
+- latest - The default. If no release-version is specified, this is what is used.
+- rc - Release candidate.
+- wip - The current Rhino wip which is +1 of the major release version. For example, if Rhino 8 is currently the release version, wip will be 9.
 
 ### A note about the Rhino Token
 
@@ -69,7 +78,7 @@ env:
 jobs:
   build:
     - name: Install Rhino
-      uses: mcneel/setup-rhino3d@v1.0.0
+      uses: mcneel/setup-rhino3d@v1.1.0
       with:
         email-address: ${{ secrets.EMAIL_ADDRESS }}
 # ...
@@ -87,7 +96,7 @@ Rhino.Testing nuget package (see below) to start Rhino and run tests.
 - [successful run of the setup-rhino3d action](https://github.com/mcneel/SimpleRhinoTests/actions/runs/10159446794/job/28093702909#step:4:1)
 
 ```bash
-Run mcneel/setup-rhino3d@v1.0.0
+Run mcneel/setup-rhino3d@v1.1.0
 Downloading and installing the latest Rhino 3d...
 
 ===>  Successfully installed Rhino 8.9.24194.18121

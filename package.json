@@ -1,7 +1,7 @@
 {
   "name": "setup-rhino3d",
   "description": "Github Action to install Rhino3d",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "",
   "private": true,
   "homepage": "https://github.com/mcneel/setup-rhino3d#readme",
