@@ -54,9 +54,11 @@ jobs:
 
 **Optional** The release version you wish to use. Values include:
 
-- latest - The default. If no release-version is specified, this is what is used.
+- latest - The default. If no release-version is specified, this is what is
+  used.
 - rc - Release candidate.
-- wip - The current Rhino wip which is +1 of the major release version. For example, if Rhino 8 is currently the release version, wip will be 9.
+- wip - The current Rhino wip which is +1 of the major release version. For
+  example, if Rhino 8 is currently the release version, wip will be 9.
 
 ### A note about the Rhino Token
 
