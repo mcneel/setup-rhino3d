@@ -24936,7 +24936,23 @@ const run = async () => {
 
     // Get the inputs from the workflow file
     const emailAddress = core.getInput('email-address', { required: true })
-    // const rhinoVersion = core.getInput('rhino-version', { required: false })
+    const releaseVersion = core.getInput('release-version', { required: false }) // rc, wip, latest
+
+    //https://www.rhino3d.com/download/rhino/8/latest/rc/direct/?email=your_email
+    //https://www.rhino3d.com/download/rhino/8/latest/direct/?email=your_email
+    //https://www.rhino3d.com/download/rhino/9/wip/direct/?email=your_email
+
+    let url = 'https://www.rhino3d.com/download/rhino/'
+    switch (releaseVersion) {
+      case 'rc':
+        url += '8/latest/rc/direct/?email=${emailAddress}'
+        break
+      case 'wip':
+        url += '9/wip/direct/?email==${emailAddress}'
+        break
+      default:
+        url += '8/latest/direct/?email==${emailAddress}'
+    }
 
     /*
     let command = path.join(
@@ -24955,7 +24971,7 @@ const run = async () => {
     switch (os.platform()) {
       case 'win32':
         scriptName += '.ps1'
-        commandArgs = ` -EmailAddress ${emailAddress}`
+        commandArgs = ` -URL ${url}`
         shell = { shell: 'powershell.exe' }
         core.debug(`Script name is ${scriptName}`)
         break
