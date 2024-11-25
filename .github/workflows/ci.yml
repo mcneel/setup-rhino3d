@@ -47,6 +47,9 @@ jobs:
   test-action:
     name: GitHub Actions Test
     runs-on: windows-latest
+    strategy:
+      matrix:
+        release: [rc, wip, latest]
 
     steps:
       - name: Checkout
@@ -58,3 +61,4 @@ jobs:
         uses: ./
         with:
           email-address: ${{ secrets.EMAIL_ADDRESS }}
+          release-version: ${{ matrix.release }}
