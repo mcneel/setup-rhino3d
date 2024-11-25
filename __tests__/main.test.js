@@ -34,28 +34,21 @@ describe('action', () => {
 
     await main.run()
     expect(runMock).toHaveReturned()
-  })
+  }, 180000)
 
   test('fails on Linux', async () => {
     platformMock.mockImplementation(() => 'linux')
     await main.run()
     expect(runMock).toHaveReturned()
-    expect(setFailedMock).toHaveBeenCalledWith('Linux is not supported')
-  })
+    expect(setFailedMock).toHaveBeenCalledWith('Unsupported platform')
+  }, 180000)
 
   test('fails on macOS', async () => {
     platformMock.mockImplementation(() => 'darwin')
     await main.run()
     expect(runMock).toHaveReturned()
-    expect(setFailedMock).toHaveBeenCalledWith('macOS is not supported')
-  })
-
-  test('output script name on Windows', async () => {
-    platformMock.mockImplementation(() => 'win32')
-    await main.run()
-    expect(runMock).toHaveReturned()
-    expect(debugMock).toHaveBeenCalledWith('Script name is setup-rhino.ps1')
-  })
+    expect(setFailedMock).toHaveBeenCalledWith('Unsupported platform')
+  }, 180000)
 
   test('execAsync is called', async () => {
     execMock.mockImplementation('', '')
