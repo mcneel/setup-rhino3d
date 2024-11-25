@@ -25024,7 +25024,7 @@ const { finished } = __nccwpck_require__(6402)
 
 // from https://stackoverflow.com/a/74722818
 
-async function download(url, file) {
+const download = async (url, file) => {
   const stream = fs.createWriteStream(file)
   const { body } = await fetch(url)
   await finished(Readable.fromWeb(body).pipe(stream))
