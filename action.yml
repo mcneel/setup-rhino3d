@@ -6,6 +6,9 @@ inputs:
   email-address: # id of input
     description: 'Email address associated with the user'
     required: true
+  release-version: # version to install
+    description: 'Release version of Rhino3d to install'
+    required: false
 
 #todo: do we need any outputs?
 
