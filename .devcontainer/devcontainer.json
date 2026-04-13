@@ -1,6 +1,6 @@
 {
   "name": "GitHub Actions (JavaScript)",
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:24",
   "postCreateCommand": "npm install",
   "customizations": {
     "codespaces": {

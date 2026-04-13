@@ -57,8 +57,7 @@ jobs:
 - latest - The default. If no release-version is specified, this is what is
   used.
 - rc - Release candidate.
-- wip - The current Rhino wip which is +1 of the major release version. For
-  example, if Rhino 8 is currently the release version, wip will be 9.
+- wip - The current Rhino WIP version.
 
 ### A note about the Rhino Token
 
@@ -123,7 +122,7 @@ need to perform some initial setup steps before you can develop your action.
 > [`nodenv`](https://github.com/nodenv/nodenv) or
 > [`nvm`](https://github.com/nvm-sh/nvm), you can run `nodenv install` in the
 > root of your repository to install the version specified in
-> [`package.json`](./package.json). Otherwise, 20.x or later should work!
+> [`package.json`](./package.json). Otherwise, 24.x or later should work!
 
 1. 🛠️ Install the dependencies
 
