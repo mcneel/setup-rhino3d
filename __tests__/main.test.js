@@ -1,6 +1,8 @@
 /**
  * Unit tests for the action's main functionality, src/main.js
  */
+jest.mock('@actions/core')
+
 const core = require('@actions/core')
 const main = require('../src/main')
 const os = require('node:os')
