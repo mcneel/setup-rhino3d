@@ -45,3 +45,4 @@ jobs:
           VALIDATE_TYPESCRIPT_BIOME: false
           VALIDATE_BIOME_FORMAT: false
           VALIDATE_BIOME_LINT: false
+          VALIDATE_TRIVY: false

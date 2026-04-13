@@ -1,6 +1,6 @@
-import fs from 'node:fs'
-import { Readable } from 'node:stream'
-import { finished } from 'node:stream/promises'
+const fs = require('node:fs')
+const { Readable } = require('node:stream')
+const { finished } = require('node:stream/promises')
 
 // from https://stackoverflow.com/a/74722818
 
@@ -10,4 +10,4 @@ const download = async (url, file) => {
   await finished(Readable.fromWeb(body).pipe(stream))
 }
 
-export { download }
+module.exports = { download }

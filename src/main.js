@@ -1,10 +1,10 @@
-import core from '@actions/core'
-import os from 'node:os'
-import { promisify } from 'node:util'
-import { exec } from 'node:child_process'
-import { download } from './utilities.js'
+const core = require('@actions/core')
+const os = require('node:os')
+const util = require('node:util')
 
-const execAsync = promisify(exec)
+const execAsync = util.promisify(require('node:child_process').exec)
+
+const download = require('./utilities').download
 
 /**
  * The main function for the action.
@@ -86,4 +86,7 @@ const run = async () => {
   }
 }
 
-export { run, execAsync }
+module.exports = {
+  run,
+  execAsync
+}
