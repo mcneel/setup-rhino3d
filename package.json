@@ -66,6 +66,9 @@
   "dependencies": {
     "@actions/core": "^1.11.1"
   },
+  "overrides": {
+    "undici": ">=6.24.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.26.0",
     "@babel/eslint-parser": "^7.25.9",
