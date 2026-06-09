@@ -9,6 +9,9 @@ inputs:
   release-version: # version to install
     description: 'Release version of Rhino3d to install'
     required: false
+  download-url:
+    description: 'Direct download URL. When set, release-version is ignored.'
+    required: false
 
 #todo: do we need any outputs?
 

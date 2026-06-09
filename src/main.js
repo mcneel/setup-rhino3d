@@ -22,25 +22,47 @@ const run = async () => {
     // Get the inputs from the workflow file
     const emailAddress = core.getInput('email-address', { required: true })
     const releaseVersion = core.getInput('release-version', { required: false }) // rc, wip, latest
+    const downloadUrl = core.getInput('download-url', { required: false }) // direct URL to an installer, e.g. a dujour build
 
     // build URL
-    let url = 'https://www.rhino3d.com/download/rhino/'
-    let version = '8'
-    switch (releaseVersion) {
-      case 'rc':
-        url += `8/latest/rc/direct/?email=${emailAddress}`
-        console.log(
-          'Downloading and installing the latest Rhino 3d Release Candidate...'
+    let url
+    let version
+
+    if (downloadUrl) {
+      // Use a direct download URL (e.g. a dujour build), bypassing
+      // rhino3d.com. The major version is inferred from the installer
+      // filename, e.g. .../rhino_9.0.26160.06305.exe -> 9
+      const match = downloadUrl.match(/rhino_(\d+)\./i)
+      if (!match) {
+        core.setFailed(
+          `Could not determine the Rhino major version from download-url: ${downloadUrl}`
         )
-        break
-      case 'wip':
-        url += `9/wip/direct/?email=${emailAddress}`
-        console.log('Downloading and installing the Rhino 3d WIP...')
-        version = '9'
-        break
-      default:
-        url += `8/latest/direct/?email=${emailAddress}`
-        console.log('Downloading and installing the latest Rhino 3d...')
+        return
+      }
+      url = downloadUrl
+      version = match[1]
+      console.log(
+        `Downloading and installing Rhino 3d ${version} from ${downloadUrl} ...`
+      )
+    } else {
+      url = 'https://www.rhino3d.com/download/rhino/'
+      version = '8'
+      switch (releaseVersion) {
+        case 'rc':
+          url += `8/latest/rc/direct/?email=${emailAddress}`
+          console.log(
+            'Downloading and installing the latest Rhino 3d Release Candidate...'
+          )
+          break
+        case 'wip':
+          url += `9/wip/direct/?email=${emailAddress}`
+          console.log('Downloading and installing the Rhino 3d WIP...')
+          version = '9'
+          break
+        default:
+          url += `8/latest/direct/?email=${emailAddress}`
+          console.log('Downloading and installing the latest Rhino 3d...')
+      }
     }
 
     process.chdir('c:\\temp')

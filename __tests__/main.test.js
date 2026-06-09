@@ -50,6 +50,25 @@ describe('action', () => {
     expect(setFailedMock).toHaveBeenCalledWith('Unsupported platform')
   }, 180000)
 
+  test('fails when download-url has no inferable version', async () => {
+    getInputMock.mockImplementation(name => {
+      switch (name) {
+        case 'email-address':
+          return 'bozo@mcneel.com'
+        case 'download-url':
+          return 'https://files.mcneel.com/dujour/exe/20260609/setup.exe'
+        default:
+          return ''
+      }
+    })
+
+    await main.run()
+    expect(runMock).toHaveReturned()
+    expect(setFailedMock).toHaveBeenCalledWith(
+      'Could not determine the Rhino major version from download-url: https://files.mcneel.com/dujour/exe/20260609/setup.exe'
+    )
+  }, 180000)
+
   test('execAsync is called', async () => {
     execMock.mockImplementation('', '')
     await main.execAsync()

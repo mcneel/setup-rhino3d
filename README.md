@@ -59,6 +59,11 @@ jobs:
 - rc - Release candidate.
 - wip - The current Rhino WIP version.
 
+### download-url
+
+**Optional** A direct download URL to a Rhino3d installer. When set,
+`release-version` is ignored.
+
 ### A note about the Rhino Token
 
 The workflow using this action should set an env variable with the Rhino Token
