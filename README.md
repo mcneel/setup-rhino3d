@@ -171,3 +171,16 @@ prior to committing changes.
 Users expect to consume this action via a version number associated with a tag.
 Do not forget to add a tag to any commit you wish to use or have users be able
 to use.
+
+Following GitHub Actions best practice, when tagging a new minor or patch
+version, make sure to update the major version tag, e.g.
+
+```commandline
+git tag v2.3.0             # tag new minor version (immutable)
+git tag --force v2         # update moving tag
+git push origin v2.3.0     # push new minor version tag
+git push --force origin v2 # push moving tag
+```
+
+This ensures that consumers of `setup-rhino3d@v2` get non-breaking updates
+automatically.
