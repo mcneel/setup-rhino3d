@@ -40,10 +40,18 @@ jobs:
 
   test-action:
     name: GitHub Actions Test
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
+        os: [windows-latest, macos-latest]
         release: [rc, wip, latest]
+        exclude:
+          # macOS only exercises the wip channel
+          - os: macos-latest
+            release: rc
+          - os: macos-latest
+            release: latest
 
     steps:
       - name: Checkout
