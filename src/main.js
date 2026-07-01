@@ -74,25 +74,30 @@ const run = async () => {
         `Downloading and installing Rhino 3d ${version} from ${downloadUrl} ...`
       )
     } else {
-      const slug = os.platform() === 'darwin' ? 'rhino-for-mac' : 'rhino'
-      url = `https://www.rhino3d.com/download/${slug}/`
+      // The version/channel path is shared across platforms; only the URL shape differs.
       version = '8'
+      let channelPath
       switch (releaseVersion) {
         case 'rc':
-          url += `8/latest/rc/direct/?email=${emailAddress}`
+          channelPath = '8/latest/rc'
           console.log(
             'Downloading and installing the latest Rhino 3d Release Candidate...'
           )
           break
         case 'wip':
-          url += `9/wip/direct/?email=${emailAddress}`
-          console.log('Downloading and installing the Rhino 3d WIP...')
+          channelPath = '9/wip'
           version = '9'
+          console.log('Downloading and installing the Rhino 3d WIP...')
           break
         default:
-          url += `8/latest/direct/?email=${emailAddress}`
+          channelPath = '8/latest'
           console.log('Downloading and installing the latest Rhino 3d...')
       }
+
+      url =
+        os.platform() === 'darwin'
+          ? `https://www.rhino3d.com/www-api/download/direct?slug=rhino-for-mac/${channelPath}&email=${emailAddress}`
+          : `https://www.rhino3d.com/download/rhino/${channelPath}/direct/?email=${emailAddress}`
     }
 
     if (os.platform() === 'darwin') {

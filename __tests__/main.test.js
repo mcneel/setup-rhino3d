@@ -68,7 +68,9 @@ describe('action', () => {
 
     expect(runMock).toHaveReturned()
     expect(download).toHaveBeenCalled()
-    expect(download.mock.calls[0][0]).toContain('rhino-for-mac')
+    expect(download.mock.calls[0][0]).toContain(
+      'www-api/download/direct?slug=rhino-for-mac'
+    )
     expect(setFailedMock).not.toHaveBeenCalled()
   }, 180000)
 
