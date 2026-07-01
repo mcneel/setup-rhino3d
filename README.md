@@ -32,7 +32,7 @@ automated testing.
 jobs:
   build:
     - name: Install Rhino
-      uses: mcneel/setup-rhino3d@v2
+      uses: mcneel/setup-rhino3d@v3
       with:
         email-address: ${{ secrets.EMAIL_ADDRESS }}
         release-version: rc # see below for values
@@ -85,7 +85,7 @@ env:
 jobs:
   build:
     - name: Install Rhino
-      uses: mcneel/setup-rhino3d@v2
+      uses: mcneel/setup-rhino3d@v3
       with:
         email-address: ${{ secrets.EMAIL_ADDRESS }}
 # ...
@@ -103,7 +103,7 @@ Rhino.Testing nuget package (see below) to start Rhino and run tests.
 - [successful run of the setup-rhino3d action](https://github.com/mcneel/SimpleRhinoTests/actions/runs/10159446794/job/28093702909#step:4:1)
 
 ```bash
-Run mcneel/setup-rhino3d@v2
+Run mcneel/setup-rhino3d@v3
 Downloading and installing the latest Rhino 3d...
 
 ===>  Successfully installed Rhino 8.9.24194.18121
