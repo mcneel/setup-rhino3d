@@ -25722,7 +25722,6 @@ const run = async () => {
         `Downloading and installing Rhino 3d ${version} from ${downloadUrl} ...`
       )
     } else {
-      // The version/channel path is shared across platforms; only the URL shape differs.
       version = '8'
       let channelPath
       switch (releaseVersion) {
@@ -25742,8 +25741,6 @@ const run = async () => {
           console.log('Downloading and installing the latest Rhino 3d...')
       }
 
-      // macOS resolves through the download API by slug; the friendly
-      // /download/rhino-for-mac/<path>/direct route returns an empty 200.
       url =
         os.platform() === 'darwin'
           ? `https://www.rhino3d.com/www-api/download/direct?slug=rhino-for-mac/${channelPath}&email=${emailAddress}`

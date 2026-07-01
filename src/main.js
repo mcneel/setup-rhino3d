@@ -74,7 +74,6 @@ const run = async () => {
         `Downloading and installing Rhino 3d ${version} from ${downloadUrl} ...`
       )
     } else {
-      // The version/channel path is shared across platforms; only the URL shape differs.
       version = '8'
       let channelPath
       switch (releaseVersion) {
