@@ -5,15 +5,16 @@
 ![Coverage](./badges/coverage.svg)
 
 This action supports automating the download and installation of the latest
-published Rhino3d service release onto Windows runners. The objective is to
-facilitate the setup of Rhino for automated workflows such as CI and automated
-testing.
+published Rhino3d service release onto Windows and macOS runners. The objective
+is to facilitate the setup of Rhino for automated workflows such as CI and
+automated testing.
 
 ## What this action does
 
-- Downloads the latest Rhino for Windows (8 at the time of writing) service
-  release installer.
-- Installs the downloaded Rhino installer.
+- Downloads the latest Rhino (8 at the time of writing) service release
+  installer for the runner's platform.
+- On Windows, runs the `.exe` installer silently.
+- On macOS, mounts the `.dmg` and copies the app bundle into `/Applications`.
 
 ## What this action does not do
 
@@ -158,7 +159,7 @@ need to perform some initial setup steps before you can develop your action.
    PASS  ./main.test.js
      ✓ sets the input values (84 ms)
      ✓ fails on Linux (17 ms)
-     ✓ fails on macOS (22 ms)
+     ✓ installs on macOS (22 ms)
      ✓ output script name on Windows (4 ms)
      ✓ runScript returns
    ```

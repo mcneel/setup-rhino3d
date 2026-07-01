@@ -1,9 +1,23 @@
 /**
  * Unit tests for the action's main functionality, src/main.js
  */
+jest.mock('../src/utilities')
+jest.mock('node:child_process', () => {
+  const { promisify } = require('node:util')
+  const exec = jest.fn()
+  // Mirror real child_process.exec's promisify hook so util.promisify(exec) resolves
+  // to {stdout, stderr} the same way (keeps the existing execAsync test working).
+  exec[promisify.custom] = async () => ({
+    stdout: '/Applications/Rhino 8.app',
+    stderr: ''
+  })
+  return { exec }
+})
+
 const core = require('@actions/core')
 const main = require('../src/main')
 const os = require('node:os')
+const { download } = require('../src/utilities')
 
 // Mock the GitHub Actions core library
 // const debugMock = jest.spyOn(core, 'debug').mockImplementation()
@@ -43,11 +57,19 @@ describe('action', () => {
     expect(setFailedMock).toHaveBeenCalledWith('Unsupported platform')
   }, 180000)
 
-  test('fails on macOS', async () => {
+  test('installs on macOS', async () => {
+    getInputMock.mockImplementation(name =>
+      name === 'email-address' ? 'bozo@mcneel.com' : ''
+    )
     platformMock.mockImplementation(() => 'darwin')
+    download.mockResolvedValue()
+
     await main.run()
+
     expect(runMock).toHaveReturned()
-    expect(setFailedMock).toHaveBeenCalledWith('Unsupported platform')
+    expect(download).toHaveBeenCalled()
+    expect(download.mock.calls[0][0]).toContain('rhino-for-mac')
+    expect(setFailedMock).not.toHaveBeenCalled()
   }, 180000)
 
   test('fails when download-url has no inferable version', async () => {
