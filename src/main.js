@@ -52,6 +52,14 @@ const run = async () => {
     const emailAddress = core.getInput('email-address', { required: true })
     const releaseVersion = core.getInput('release-version', { required: false }) // rc, wip, latest
     const downloadUrl = core.getInput('download-url', { required: false }) // direct URL to an installer, e.g. a dujour build
+    const majorVersion = core.getInput('major-version', { required: false }) // major version, e.g. 9
+
+    if (majorVersion && !/^\d+$/.test(majorVersion)) {
+      core.setFailed(
+        `major-version must be a major version number such as 9, got: ${majorVersion}`
+      )
+      return
+    }
 
     // build URL
     let url
@@ -74,23 +82,29 @@ const run = async () => {
         `Downloading and installing Rhino 3d ${version} from ${downloadUrl} ...`
       )
     } else {
-      version = '8'
+      // Without major-version, keep the historical defaults so existing workflows don't change
       let channelPath
       switch (releaseVersion) {
         case 'rc':
-          channelPath = '8/latest/rc'
+          version = majorVersion || '8'
+          channelPath = `${version}/latest/rc`
           console.log(
-            'Downloading and installing the latest Rhino 3d Release Candidate...'
+            `Downloading and installing the latest Rhino 3d ${version} Release Candidate...`
           )
           break
         case 'wip':
-          channelPath = '9/wip'
-          version = '9'
-          console.log('Downloading and installing the Rhino 3d WIP...')
+          version = majorVersion || '9'
+          channelPath = `${version}/wip`
+          console.log(
+            `Downloading and installing the Rhino 3d ${version} WIP...`
+          )
           break
         default:
-          channelPath = '8/latest'
-          console.log('Downloading and installing the latest Rhino 3d...')
+          version = majorVersion || '8'
+          channelPath = `${version}/latest`
+          console.log(
+            `Downloading and installing the latest Rhino 3d ${version}...`
+          )
       }
 
       url =

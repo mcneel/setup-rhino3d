@@ -11,8 +11,8 @@ automated testing.
 
 ## What this action does
 
-- Downloads the latest Rhino (8 at the time of writing) service release
-  installer for the runner's platform.
+- Downloads the latest Rhino service release installer for the runner's platform
+  (Rhino 8 unless `major-version` is set).
 - On Windows, runs the `.exe` installer silently.
 - On macOS, mounts the `.dmg` and copies the app bundle into `/Applications`.
 
@@ -22,7 +22,8 @@ automated testing.
   Core-Hour Billing Token or Rhino Account.
 - This action does not do anything related to automatically running Rhino.
 - This action does not do anything related to automated testing.
-- This action does not allow you to specify a Rhino version.
+- This action does not allow you to pick a specific service release; use
+  `download-url` for that.
 
 ## Example usage
 
@@ -36,6 +37,7 @@ jobs:
       with:
         email-address: ${{ secrets.EMAIL_ADDRESS }}
         release-version: rc # see below for values
+        major-version: 9
 # ...
 ```
 
@@ -60,10 +62,15 @@ jobs:
 - rc - Release candidate.
 - wip - The current Rhino WIP version.
 
+### major-version
+
+**Optional** The major version of Rhino to install, e.g. `9`. When omitted,
+`latest` and `rc` install Rhino 8 and `wip` installs Rhino 9.
+
 ### download-url
 
 **Optional** A direct download URL to a Rhino3d installer. When set,
-`release-version` is ignored.
+`release-version` and `major-version` are ignored.
 
 ### A note about the Rhino Token
 

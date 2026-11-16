@@ -74,6 +74,57 @@ describe('action', () => {
     expect(setFailedMock).not.toHaveBeenCalled()
   }, 180000)
 
+  test.each([
+    ['', '', '8/latest'],
+    ['rc', '', '8/latest/rc'],
+    ['wip', '', '9/wip'],
+    ['', '9', '9/latest'],
+    ['latest', '9', '9/latest'],
+    ['rc', '9', '9/latest/rc'],
+    ['wip', '10', '10/wip']
+  ])(
+    'release-version "%s" with major-version "%s" downloads %s',
+    async (releaseVersion, majorVersion, channelPath) => {
+      const inputs = {
+        'email-address': 'bozo@mcneel.com',
+        'release-version': releaseVersion,
+        'major-version': majorVersion
+      }
+      getInputMock.mockImplementation(name => inputs[name] ?? '')
+      platformMock.mockImplementation(() => 'darwin')
+      download.mockResolvedValue()
+
+      await main.run()
+
+      expect(download.mock.calls[0][0]).toContain(
+        `slug=rhino-for-mac/${channelPath}&`
+      )
+      expect(setFailedMock).not.toHaveBeenCalled()
+    },
+    180000
+  )
+
+  test('fails when major-version is not a major version number', async () => {
+    getInputMock.mockImplementation(name => {
+      switch (name) {
+        case 'email-address':
+          return 'bozo@mcneel.com'
+        case 'major-version':
+          return '9.1'
+        default:
+          return ''
+      }
+    })
+    platformMock.mockImplementation(() => 'darwin')
+
+    await main.run()
+
+    expect(download).not.toHaveBeenCalled()
+    expect(setFailedMock).toHaveBeenCalledWith(
+      'major-version must be a major version number such as 9, got: 9.1'
+    )
+  }, 180000)
+
   test('fails when download-url has no inferable version', async () => {
     getInputMock.mockImplementation(name => {
       switch (name) {
