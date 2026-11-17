@@ -74,6 +74,78 @@ describe('action', () => {
     expect(setFailedMock).not.toHaveBeenCalled()
   }, 180000)
 
+  test.each([
+    ['', '', '9/latest'],
+    ['latest', '', '9/latest'],
+    ['rc', '', '9/latest/rc'],
+    ['', '9', '9/latest'],
+    ['rc', '9', '9/latest/rc'],
+    ['', '8', '8/latest'],
+    ['latest', '8', '8/latest'],
+    ['rc', '8', '8/latest/rc']
+  ])(
+    'release-version "%s" with major-version "%s" downloads %s',
+    async (releaseVersion, majorVersion, channelPath) => {
+      const inputs = {
+        'email-address': 'bozo@mcneel.com',
+        'release-version': releaseVersion,
+        'major-version': majorVersion
+      }
+      getInputMock.mockImplementation(name => inputs[name] ?? '')
+      platformMock.mockImplementation(() => 'darwin')
+      download.mockResolvedValue()
+
+      await main.run()
+
+      expect(download.mock.calls[0][0]).toContain(
+        `slug=rhino-for-mac/${channelPath}&`
+      )
+      expect(setFailedMock).not.toHaveBeenCalled()
+    },
+    180000
+  )
+
+  test.each(['9.1', '7', '10'])(
+    'fails when major-version is %s',
+    async majorVersion => {
+      const inputs = {
+        'email-address': 'bozo@mcneel.com',
+        'major-version': majorVersion
+      }
+      getInputMock.mockImplementation(name => inputs[name] ?? '')
+      platformMock.mockImplementation(() => 'darwin')
+
+      await main.run()
+
+      expect(download).not.toHaveBeenCalled()
+      expect(setFailedMock).toHaveBeenCalledWith(
+        `major-version must be one of 8, 9, got: ${majorVersion}`
+      )
+    },
+    180000
+  )
+
+  test.each(['', '8', '9'])(
+    'fails on wip with major-version "%s"',
+    async majorVersion => {
+      const inputs = {
+        'email-address': 'bozo@mcneel.com',
+        'release-version': 'wip',
+        'major-version': majorVersion
+      }
+      getInputMock.mockImplementation(name => inputs[name] ?? '')
+      platformMock.mockImplementation(() => 'darwin')
+
+      await main.run()
+
+      expect(download).not.toHaveBeenCalled()
+      expect(setFailedMock).toHaveBeenCalledWith(
+        'No Rhino WIP is currently available. Use release-version latest or rc.'
+      )
+    },
+    180000
+  )
+
   test('fails when download-url has no inferable version', async () => {
     getInputMock.mockImplementation(name => {
       switch (name) {

@@ -7,10 +7,15 @@ inputs:
     description: 'Email address associated with the user'
     required: true
   release-version: # version to install
-    description: 'Release version of Rhino3d to install'
+    description: 'Release version of Rhino3d to install: latest (default) or rc'
+    required: false
+  major-version:
+    description: 'Major version of Rhino3d to install: 9 (default) or 8'
     required: false
   download-url:
-    description: 'Direct download URL. When set, release-version is ignored.'
+    description:
+      'Direct download URL. When set, release-version and major-version are
+      ignored.'
     required: false
 
 #todo: do we need any outputs?

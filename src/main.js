@@ -7,6 +7,9 @@ const execAsync = util.promisify(require('node:child_process').exec)
 
 const download = require('./utilities').download
 
+const DEFAULT_MAJOR_VERSION = '9'
+const SUPPORTED_MAJOR_VERSIONS = ['8', '9']
+
 const installMacOS = async url => {
   const dmg = path.join(os.tmpdir(), 'rhino_setup.dmg')
   await download(url, dmg)
@@ -50,8 +53,27 @@ const run = async () => {
 
     // Get the inputs from the workflow file
     const emailAddress = core.getInput('email-address', { required: true })
-    const releaseVersion = core.getInput('release-version', { required: false }) // rc, wip, latest
+    const releaseVersion = core.getInput('release-version', { required: false }) // latest or rc
     const downloadUrl = core.getInput('download-url', { required: false }) // direct URL to an installer, e.g. a dujour build
+    const majorVersion = core.getInput('major-version', { required: false }) // 8 or 9, defaults to 9
+
+    if (!downloadUrl) {
+      if (majorVersion && !SUPPORTED_MAJOR_VERSIONS.includes(majorVersion)) {
+        core.setFailed(
+          `major-version must be one of ${SUPPORTED_MAJOR_VERSIONS.join(', ')}, got: ${majorVersion}`
+        )
+        return
+      }
+
+      // The Rhino 8 and 9 WIP channels serve outdated betas and there is no
+      // Rhino 10 WIP yet. See INF-917.
+      if (releaseVersion === 'wip') {
+        core.setFailed(
+          'No Rhino WIP is currently available. Use release-version latest or rc.'
+        )
+        return
+      }
+    }
 
     // build URL
     let url
@@ -74,23 +96,20 @@ const run = async () => {
         `Downloading and installing Rhino 3d ${version} from ${downloadUrl} ...`
       )
     } else {
-      version = '8'
+      version = majorVersion || DEFAULT_MAJOR_VERSION
       let channelPath
       switch (releaseVersion) {
         case 'rc':
-          channelPath = '8/latest/rc'
+          channelPath = `${version}/latest/rc`
           console.log(
-            'Downloading and installing the latest Rhino 3d Release Candidate...'
+            `Downloading and installing the latest Rhino 3d ${version} Release Candidate...`
           )
           break
-        case 'wip':
-          channelPath = '9/wip'
-          version = '9'
-          console.log('Downloading and installing the Rhino 3d WIP...')
-          break
         default:
-          channelPath = '8/latest'
-          console.log('Downloading and installing the latest Rhino 3d...')
+          channelPath = `${version}/latest`
+          console.log(
+            `Downloading and installing the latest Rhino 3d ${version}...`
+          )
       }
 
       url =
