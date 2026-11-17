@@ -12,7 +12,7 @@ automated testing.
 ## What this action does
 
 - Downloads the latest Rhino service release installer for the runner's platform
-  (Rhino 8 unless `major-version` is set).
+  (Rhino 9 unless `major-version` is set to 8).
 - On Windows, runs the `.exe` installer silently.
 - On macOS, mounts the `.dmg` and copies the app bundle into `/Applications`.
 
@@ -33,7 +33,7 @@ automated testing.
 jobs:
   build:
     - name: Install Rhino
-      uses: mcneel/setup-rhino3d@v3.0.0
+      uses: mcneel/setup-rhino3d@v4
       with:
         email-address: ${{ secrets.EMAIL_ADDRESS }}
         release-version: rc # see below for values
@@ -60,12 +60,12 @@ jobs:
 - latest - The default. If no release-version is specified, this is what is
   used.
 - rc - Release candidate.
-- wip - The current Rhino WIP version.
+
+`wip` is not available until a Rhino 10 WIP is released.
 
 ### major-version
 
-**Optional** The major version of Rhino to install, e.g. `9`. When omitted,
-`latest` and `rc` install Rhino 8 and `wip` installs Rhino 9.
+**Optional** The major version of Rhino to install: `9` (the default) or `8`.
 
 ### download-url
 
@@ -92,7 +92,7 @@ env:
 jobs:
   build:
     - name: Install Rhino
-      uses: mcneel/setup-rhino3d@v3.0.0
+      uses: mcneel/setup-rhino3d@v4
       with:
         email-address: ${{ secrets.EMAIL_ADDRESS }}
 # ...

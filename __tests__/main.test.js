@@ -75,13 +75,14 @@ describe('action', () => {
   }, 180000)
 
   test.each([
-    ['', '', '8/latest'],
-    ['rc', '', '8/latest/rc'],
-    ['wip', '', '9/wip'],
+    ['', '', '9/latest'],
+    ['latest', '', '9/latest'],
+    ['rc', '', '9/latest/rc'],
     ['', '9', '9/latest'],
-    ['latest', '9', '9/latest'],
     ['rc', '9', '9/latest/rc'],
-    ['wip', '10', '10/wip']
+    ['', '8', '8/latest'],
+    ['latest', '8', '8/latest'],
+    ['rc', '8', '8/latest/rc']
   ])(
     'release-version "%s" with major-version "%s" downloads %s',
     async (releaseVersion, majorVersion, channelPath) => {
@@ -104,26 +105,46 @@ describe('action', () => {
     180000
   )
 
-  test('fails when major-version is not a major version number', async () => {
-    getInputMock.mockImplementation(name => {
-      switch (name) {
-        case 'email-address':
-          return 'bozo@mcneel.com'
-        case 'major-version':
-          return '9.1'
-        default:
-          return ''
+  test.each(['9.1', '7', '10'])(
+    'fails when major-version is %s',
+    async majorVersion => {
+      const inputs = {
+        'email-address': 'bozo@mcneel.com',
+        'major-version': majorVersion
       }
-    })
-    platformMock.mockImplementation(() => 'darwin')
+      getInputMock.mockImplementation(name => inputs[name] ?? '')
+      platformMock.mockImplementation(() => 'darwin')
 
-    await main.run()
+      await main.run()
 
-    expect(download).not.toHaveBeenCalled()
-    expect(setFailedMock).toHaveBeenCalledWith(
-      'major-version must be a major version number such as 9, got: 9.1'
-    )
-  }, 180000)
+      expect(download).not.toHaveBeenCalled()
+      expect(setFailedMock).toHaveBeenCalledWith(
+        `major-version must be one of 8, 9, got: ${majorVersion}`
+      )
+    },
+    180000
+  )
+
+  test.each(['', '8', '9'])(
+    'fails on wip with major-version "%s"',
+    async majorVersion => {
+      const inputs = {
+        'email-address': 'bozo@mcneel.com',
+        'release-version': 'wip',
+        'major-version': majorVersion
+      }
+      getInputMock.mockImplementation(name => inputs[name] ?? '')
+      platformMock.mockImplementation(() => 'darwin')
+
+      await main.run()
+
+      expect(download).not.toHaveBeenCalled()
+      expect(setFailedMock).toHaveBeenCalledWith(
+        'No Rhino WIP is currently available. Use release-version latest or rc.'
+      )
+    },
+    180000
+  )
 
   test('fails when download-url has no inferable version', async () => {
     getInputMock.mockImplementation(name => {

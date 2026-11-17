@@ -7,12 +7,10 @@ inputs:
     description: 'Email address associated with the user'
     required: true
   release-version: # version to install
-    description: 'Release version of Rhino3d to install'
+    description: 'Release version of Rhino3d to install: latest (default) or rc'
     required: false
   major-version:
-    description:
-      'Major version of Rhino3d to install, e.g. 9. Defaults to 8 for latest/rc
-      and 9 for wip.'
+    description: 'Major version of Rhino3d to install: 9 (default) or 8'
     required: false
   download-url:
     description:

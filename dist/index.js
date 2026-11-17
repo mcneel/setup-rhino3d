@@ -25655,6 +25655,9 @@ const execAsync = util.promisify((__nccwpck_require__(1421).exec))
 
 const download = (__nccwpck_require__(441).download)
 
+const DEFAULT_MAJOR_VERSION = '9'
+const SUPPORTED_MAJOR_VERSIONS = ['8', '9']
+
 const installMacOS = async url => {
   const dmg = path.join(os.tmpdir(), 'rhino_setup.dmg')
   await download(url, dmg)
@@ -25698,15 +25701,26 @@ const run = async () => {
 
     // Get the inputs from the workflow file
     const emailAddress = core.getInput('email-address', { required: true })
-    const releaseVersion = core.getInput('release-version', { required: false }) // rc, wip, latest
+    const releaseVersion = core.getInput('release-version', { required: false }) // latest or rc
     const downloadUrl = core.getInput('download-url', { required: false }) // direct URL to an installer, e.g. a dujour build
-    const majorVersion = core.getInput('major-version', { required: false }) // major version, e.g. 9
+    const majorVersion = core.getInput('major-version', { required: false }) // 8 or 9, defaults to 9
 
-    if (majorVersion && !/^\d+$/.test(majorVersion)) {
-      core.setFailed(
-        `major-version must be a major version number such as 9, got: ${majorVersion}`
-      )
-      return
+    if (!downloadUrl) {
+      if (majorVersion && !SUPPORTED_MAJOR_VERSIONS.includes(majorVersion)) {
+        core.setFailed(
+          `major-version must be one of ${SUPPORTED_MAJOR_VERSIONS.join(', ')}, got: ${majorVersion}`
+        )
+        return
+      }
+
+      // The Rhino 8 and 9 WIP channels serve outdated betas and there is no
+      // Rhino 10 WIP yet. See INF-917.
+      if (releaseVersion === 'wip') {
+        core.setFailed(
+          'No Rhino WIP is currently available. Use release-version latest or rc.'
+        )
+        return
+      }
     }
 
     // build URL
@@ -25730,25 +25744,16 @@ const run = async () => {
         `Downloading and installing Rhino 3d ${version} from ${downloadUrl} ...`
       )
     } else {
-      // Without major-version, keep the historical defaults so existing workflows don't change
+      version = majorVersion || DEFAULT_MAJOR_VERSION
       let channelPath
       switch (releaseVersion) {
         case 'rc':
-          version = majorVersion || '8'
           channelPath = `${version}/latest/rc`
           console.log(
             `Downloading and installing the latest Rhino 3d ${version} Release Candidate...`
           )
           break
-        case 'wip':
-          version = majorVersion || '9'
-          channelPath = `${version}/wip`
-          console.log(
-            `Downloading and installing the Rhino 3d ${version} WIP...`
-          )
-          break
         default:
-          version = majorVersion || '8'
           channelPath = `${version}/latest`
           console.log(
             `Downloading and installing the latest Rhino 3d ${version}...`
@@ -25827,9 +25832,14 @@ const { finished } = __nccwpck_require__(6466)
 // from https://stackoverflow.com/a/74722818
 
 const download = async (url, file) => {
+  const response = await fetch(url)
+  if (!response.ok) {
+    throw new Error(
+      `Download failed with HTTP ${response.status} ${response.statusText}`
+    )
+  }
   const stream = fs.createWriteStream(file)
-  const { body } = await fetch(url)
-  await finished(Readable.fromWeb(body).pipe(stream))
+  await finished(Readable.fromWeb(response.body).pipe(stream))
 }
 
 module.exports = { download }
